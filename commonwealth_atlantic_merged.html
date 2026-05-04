@@ -1,0 +1,3470 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>The Commonwealth of England</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;family=Cinzel:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a0f05;--ink2:#2d1a08;--paper:#f5e9d0;--paper2:#ede0c0;--paper3:#e8d8b0;
+  --aged:#c8a96e;--aged2:#a07840;--border:#8b6035;--border2:#6b4020;
+  --red:#8b1a1a;--blue-ink:#1a2a5a;--green-ink:#1a4a1a;
+  --shadow:rgba(0,0,0,0.35);
+}
+
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:0.94}}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(60px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes waveSlow{0%,100%{transform:translateX(0) scaleY(1)}50%{transform:translateX(8px) scaleY(1.1)}}
+@keyframes burn{0%,100%{opacity:0.7;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+@keyframes burst{to{transform:translate(-50%,-50%) scale(2.8);opacity:0}}
+@keyframes slideIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes unfurl{from{max-height:0;opacity:0}to{max-height:800px;opacity:1}}
+@keyframes inkDrip{0%{opacity:0;transform:scaleY(0)}100%{opacity:1;transform:scaleY(1)}}
+@keyframes floatChar{0%,100%{transform:translateY(0px)}50%{transform:translateY(-6px)}}
+
+html,body{min-height:100%;background:#2a1a0a url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z' fill='none' stroke='%23ffffff08' stroke-width='1'/%3E%3C/svg%3E");font-family:'IM Fell English',serif;color:var(--ink)}
+
+/* PAPER TEXTURE OVERLAY */
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4}
+
+#gr{max-width:760px;margin:0 auto;padding:2rem 1rem;display:flex;flex-direction:column;gap:1.5rem}
+
+/* === SCREENS === */
+.screen{display:none;flex-direction:column;gap:1.25rem;animation:slideIn 0.4s ease-out}
+.screen.active{display:flex}
+
+/* === PARCHMENT === */
+/* Update your existing .parchment class */
+.parchment{
+  background:linear-gradient(170deg,var(--paper) 0%,var(--paper2) 40%,var(--paper3) 100%);
+  border:2px solid var(--border);
+  border-radius:4px;
+  padding:2rem 2.25rem;
+  position:relative;
+  box-shadow:4px 4px 0 var(--border2),0 8px 32px rgba(0,0,0,0.5),inset 0 0 60px rgba(160,120,40,0.1);
+}
+.parchment::before{content:'';position:absolute;inset:-1px;border:1px solid var(--aged);border-radius:4px;pointer-events:none}
+.parchment::after{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(139,96,53,0.25);border-radius:2px;pointer-events:none}
+
+/* === DECORATIVE HEADERS === */
+.chapter-head{text-align:center;margin-bottom:1.5rem}
+.chapter-rule{border:none;border-top:2px solid var(--border);margin:0.5rem 0}
+.chapter-rule.thin{border-top-width:1px;border-color:var(--aged)}
+.ornament{color:var(--border);font-size:1.4em;line-height:1;display:block;text-align:center;margin:0.4rem 0;font-family:'Cinzel',serif}
+.year-stamp{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.4rem}
+.chapter-title{font-family:'Cinzel',serif;font-size:1.7rem;font-weight:600;color:var(--ink);line-height:1.2;text-align:center;margin:0.25rem 0}
+.chapter-subtitle{font-family:'IM Fell DW Pica',serif;font-size:1rem;color:var(--ink2);font-style:italic;text-align:center}
+
+/* === BODY TEXT === */
+.body-text{font-size:15px;line-height:1.9;color:var(--ink);text-align:justify;hyphens:auto}
+.body-text+.body-text{margin-top:0.75rem}
+.drop-cap::first-letter{font-family:'Cinzel',serif;font-size:3.5em;font-weight:600;float:left;line-height:0.8;margin-right:0.08em;margin-top:0.08em;color:var(--ink);text-shadow:1px 1px 0 var(--aged)}
+
+/* === QUOTES === */
+.ink-quote{
+  border-left:3px solid var(--border2);
+  background:linear-gradient(90deg,rgba(139,96,53,0.07),transparent);
+  padding:0.85rem 1.25rem;
+  margin:1rem 0;
+  font-style:italic;
+  font-size:14px;
+  line-height:1.85;
+  color:var(--ink2);
+}
+.quote-src{font-style:normal;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--aged2);margin-top:0.4rem;font-family:'Cinzel',serif}
+
+/* === STATS ROW === */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sc{
+  background:linear-gradient(145deg,var(--paper) 0%,var(--paper3) 100%);
+  border:1px solid var(--border);
+  border-radius:2px;
+  padding:0.55rem 0.75rem;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.15);
+}
+.sn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--aged2);margin-bottom:2px}
+.sv{font-family:'Cinzel',serif;font-size:1.35rem;color:var(--ink);font-weight:600}
+.strack{height:4px;background:rgba(0,0,0,0.1);border-radius:2px;margin-top:4px;border:1px solid rgba(0,0,0,0.1)}
+.sfill{height:100%;border-radius:1px;transition:width 0.5s}
+
+/* === CHOICE BUTTONS UPGRADED === */
+.cbtn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(145deg, var(--paper2), var(--paper3));
+  border: 2px solid var(--border);
+  border-left: 8px solid var(--border2); /* Makes it clearly a selectable button */
+  border-radius: 4px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+}
+
+/* Hover: A lighter tan (cream) instead of white */
+.cbtn:hover {
+  background: #ecd9ad; 
+  transform: translateX(4px); /* Little nudge to show it's active */
+  border-color: var(--ink);
+}
+
+.cbtn .cl {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--border2);
+  margin-bottom: 6px;
+}
+
+.cbtn .cd {
+  display: block;
+  font-family: 'IM Fell English', serif;
+  font-size: 18px; /* Larger text for description */
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+/* Points Boxes (The "Pills") */
+.cbtn .eff {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cbtn .eff span {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* Dynamic Colors matched to your requested logic */
+.cbtn .eff .stab { color: #1a4a1a; background: #e8f4e8; border-color: #044004; } /* Stability Green */
+.cbtn .eff .weal { color: #a07840; background: #fdf5e8; border-color: #b48521; } /* Wealth Gold */
+.cbtn .eff .mili { color: #8b1a1a; background: #f9eded; border-color: #8a0808; } /* Military Red */
+.cbtn .eff .supp { color: #1a2a5a; background: #e8edf4; border-color: #05305c; } /* Support Blue */
+
+
+/* === BUTTONS === */
+.gbtn{
+  background:linear-gradient(145deg,var(--paper),var(--paper2));
+  border:2px solid var(--border2);
+  border-radius:3px;
+  padding:0.75rem 1.75rem;
+  font-family:'Cinzel',serif;
+  font-size:13px;
+  letter-spacing:0.08em;
+  color:var(--ink);
+  cursor:pointer;
+  align-self:flex-start;
+  transition:all 0.15s;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.2);
+}
+.gbtn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(0,0,0,0.25);border-color:var(--ink)}
+.gbtn-muted{background:transparent;border:1px solid var(--aged);border-radius:3px;padding:0.75rem 1.5rem;font-family:'Cinzel',serif;font-size:12px;color:var(--aged2);cursor:pointer;align-self:flex-start;letter-spacing:0.08em;transition:all 0.15s}
+.gbtn-muted:hover{border-color:var(--border);color:var(--ink2)}
+.btn-row{display:flex;gap:0.75rem;flex-wrap:wrap}
+
+/* === CONSEQUENCE BOX === */
+/* === CONSEQUENCE SCREEN UPDATES === */
+
+/* Centering the Image */
+#con-scene-wrap {
+  display: flex;             /* Required for centering */
+  justify-content: center;    /* Centers horizontally */
+  align-items: center;        /* Centers vertically */
+  width: 100%;
+  min-height: 200px;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--paper2); 
+  overflow: hidden;
+}
+
+#con-scene-wrap svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.consequence-box {
+  background: linear-gradient(170deg, var(--paper2), var(--paper3));
+  border: 2px solid var(--border2);
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  margin-top: 1rem;
+}
+
+.consequence-box .cbox-hd {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aged2);
+  margin-bottom: 0.6rem;
+}
+.delta-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem}
+/* Specific color pills for the Consequence Screen */
+.delta-pill.stab { background: #e8f4e8; color: #1a4a1a; border: 1px solid #044004; } /* Stability Green */
+.delta-pill.weal { background: #fdf5e8; color: #a07840; border: 1px solid #b48521; } /* Wealth Gold */
+.delta-pill.mili { background: #f9eded; color: #8b1a1a; border: 1px solid #8a0808; } /* Military Red */
+.delta-pill.supp { background: #e8edf4; color: #1a2a5a; border: 1px solid #05305c; } /* Support Blue */
+
+/* Generic spacing for the pills */
+.delta-pill {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* === OUTCOME TAGS === */
+.outcome-tag{display:inline-block;font-family:'Cinzel',serif;font-size:10px;padding:3px 12px;border-radius:2px;margin-bottom:0.75rem;letter-spacing:0.12em;text-transform:uppercase}
+.tag-victory{background:#e8f4e8;color:#1a4a1a;border:1px solid #5a8a5a}
+.tag-defeat{background:#f4e8e8;color:#5a1a1a;border:1px solid #8a5a5a}
+
+/* === NAME INPUT === */
+.name-input{background:var(--paper3);border:2px solid var(--border);border-radius:2px;padding:0.7rem 1rem;font-family:'IM Fell English',serif;font-size:1.1rem;color:var(--ink);width:100%;outline:none;transition:border-color 0.15s}
+.name-input:focus{border-color:var(--border2)}
+.name-input::placeholder{color:var(--aged);font-style:italic}
+.name-error{font-family:'Cinzel',serif;font-size:11px;color:var(--red);display:none;margin-top:-0.5rem;letter-spacing:0.06em}
+
+/* === ADVISOR BADGE === */
+.advisor-badge{display:inline-block;font-family:'Cinzel',serif;font-size:10px;color:var(--aged2);background:var(--paper3);border:1px solid var(--border);border-radius:2px;padding:3px 10px;margin-bottom:0.5rem;letter-spacing:0.1em}
+
+/* === WRONG COUNTER === */
+
+/* =====================================================
+   CHARACTER SCENE ILLUSTRATIONS
+   ===================================================== */
+.scene-wrap{width:100%;background:var(--paper2);border:2px solid var(--border);border-radius:3px;overflow:hidden;position:relative;padding:0}
+.scene-svg{
+  width:100%;
+  display:block;
+  mix-blend-mode: multiply; /* This makes the ink actually bleed into the parchment */
+}
+
+/* =====================================================
+   WAR BRIEFING
+   ===================================================== */
+.briefing-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.briefing-stat{background:var(--paper3);border:1px solid var(--border);border-radius:2px;padding:0.6rem 0.9rem}
+.briefing-stat strong{font-family:'Cinzel',serif;font-size:1rem;display:block;color:var(--ink);margin-bottom:2px}
+.briefing-stat span{font-size:12px;color:var(--ink2);font-style:italic}
+
+/* =====================================================
+   SHOOTER HUD
+   ===================================================== */
+.shooter-hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+/* =====================================================
+   BATTLEFIELD (Aged Map Style)
+   ===================================================== */
+   .battlefield-wrap {
+  background: var(--paper3); /* Changed from dark blue to parchment */
+  border: 3px solid var(--border2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); /* Softer shadow for paper */
+}
+
+.battlefield-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  background: linear-gradient(180deg, var(--paper2), var(--paper3));
+  border-bottom: 2px solid var(--border2);
+}
+
+.bf-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+#battlefield {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+  cursor: crosshair;
+  /* Match the lightest blue in your ocean wash */
+  background-color: #f5e9d0; 
+  user-select: none;
+  border-bottom: 2px solid var(--border2);
+}
+
+.sea-surface {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 55%; /* Covers the ocean area */
+  pointer-events: none;
+  /* A soft blue tint that allows parchment to show through */
+  background: rgba(70, 130, 180, 0.05); 
+}
+
+.sea-wave {
+  /* This animates the "moving ink" texture */
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  animation: waveSlow 8s ease-in-out infinite alternate;
+  opacity: 0.1;
+  filter: blur(1px); /* Softens the movement */
+}
+
+/* Info Banners (Wind/Reload) as small paper scraps */
+.info-banner {
+  position: absolute;
+  top: 10px;
+  background: var(--paper);
+  border: 1px solid var(--border2);
+  border-radius: 1px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  padding: 4px 10px;
+  z-index: 6;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+}
+
+#wind-banner { left: 10px; }
+#reload-ring { right: 10px; }
+
+/* Crosshair - Ink-drawn style */
+#crosshair {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  margin-left: -16px;
+  margin-top: -16px;
+  border: 1px dashed var(--blue-ink);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 7;
+}
+
+#crosshair::before, #crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--blue-ink);
+  opacity: 0.4;
+}
+#crosshair::before { width: 1px; height: 100%; }
+#crosshair::after { width: 100%; height: 1px; }
+
+/* Ships */
+.ship-group {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  cursor: crosshair;
+  transition: transform 0.2s;
+}
+
+.ship-group:hover { transform: translate(-50%, -52%) scale(1.05); }
+
+.ship-label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  pointer-events: none;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Splashes / Bursts (Ink splatters) */
+.splash, .hitburst {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  animation: burst 0.5s ease-out forwards;
+  mix-blend-mode: multiply; /* Key for ink-on-paper feel */
+}
+
+.splash {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #4682b4;
+  background: rgba(176, 196, 222, 0.4);
+  mix-blend-mode: multiply;
+}
+
+.hitburst {
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle, #8b1a1a 0%, transparent 80%);
+  border: 1px solid #8b1a1a;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+.smokepuff {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 4;
+  animation: burst 0.8s ease-out forwards;
+  background: rgba(60, 40, 20, 0.3); /* Brownish ink smoke */
+  width: 45px;
+  height: 45px;
+  mix-blend-mode: multiply;
+}
+
+/* === WAR LOG (big, prominent) === */
+.war-log-wrap{
+  background:linear-gradient(170deg,var(--paper) 0%,var(--paper2) 100%);
+  border:2px solid var(--border2);
+  padding:0;
+  overflow:hidden;
+}
+.war-log-header{
+  background:linear-gradient(90deg,var(--ink2),var(--ink));
+  padding:0.4rem 1rem;
+  font-family:'Cinzel',serif;
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--paper);
+}
+.war-log{
+  padding:0.85rem 1.1rem;
+  font-size:15px;
+  line-height:1.75;
+  color:var(--ink);
+  font-style:italic;
+  min-height:64px;
+}
+
+/* === TACTICAL CONTROLS === */
+.tact-controls{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.wabtn{
+  background:linear-gradient(145deg,var(--paper2),var(--paper3));
+  border:2px solid var(--border);
+  border-radius:3px;
+  padding:0.7rem 0.9rem;
+  font-family:'IM Fell English',serif;
+  font-size:13px;
+  color:var(--ink);
+  cursor:pointer;
+  text-align:left;
+  line-height:1.5;
+  transition:all 0.15s;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.15);
+}
+.wabtn:hover{background:linear-gradient(145deg,var(--paper),var(--paper2));border-color:var(--border2);transform:translate(-1px,-1px)}
+.wabtn:disabled{opacity:0.4;cursor:default;transform:none}
+.wabtn .an{font-family:'Cinzel',serif;font-size:12px;font-weight:600;display:block;margin-bottom:3px;color:var(--ink);letter-spacing:0.05em}
+.wabtn .ac{font-size:11px;color:var(--ink2);font-style:italic}
+
+/* === INTRO SCREENS === */
+.intro-section{margin-bottom:1rem}
+.intro-rule{border:none;border-top:1px solid var(--aged);margin:1rem 0}
+.intro-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.page-indicator{font-family:'Cinzel',serif;font-size:10px;color:var(--aged2);letter-spacing:0.12em}
+.progress-dots{display:flex;gap:6px}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--aged);border:1px solid var(--border);cursor:pointer;transition:background 0.2s}
+.pdot.active{background:var(--border2)}
+
+/* === FAILURE BOX === */
+.failbox{background:linear-gradient(145deg,#f9eded,#f0d8d8);border:2px solid var(--red);padding:1.25rem 1.5rem}
+.failbox .failhead{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:0.5rem}
+
+/* === MOBILE === */
+@media(max-width:600px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .shooter-hud{grid-template-columns:1fr 1fr}
+  .tact-controls{grid-template-columns:1fr}
+  #battlefield{height:280px}
+  .chapter-title{font-size:1.3rem}
+  .briefing-grid{grid-template-columns:1fr}
+}
+</style>
+
+<!-- Atlantic Web merged styles -->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* === PART 1 PALETTE, cream, black, brown === */
+  --ink:#1a0f05;--ink2:#2d1a08;--paper:#f5e9d0;--paper2:#ede0c0;--paper3:#e8d8b0;
+  --aged:#c8a96e;--aged2:#a07840;--border:#8b6035;--border2:#6b4020;
+  --red:#8b1a1a;--blue-ink:#1a2a5a;--green-ink:#1a4a1a;
+  --shadow:rgba(0,0,0,0.35);
+  /* Map-specific */
+  --node-active:#6b4020;--node-done:#2d1a08;--node-locked:rgba(139,96,53,0.15);
+  --connect-line:#6b4020;
+}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes inkDrip{0%{opacity:0;transform:scaleY(0);transform-origin:top}100%{opacity:1;transform:scaleY(1);transform-origin:top}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+html,body{
+  min-height:100%;
+  background:#2a1a0a url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z' fill='none' stroke='%23ffffff08' stroke-width='1'/%3E%3C/svg%3E");
+  font-family:'IM Fell English',serif;
+  color:var(--ink);
+}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4}
+
+#gr{max-width:800px;margin:0 auto;padding:2rem 1rem;display:flex;flex-direction:column;gap:1.5rem}
+
+.screen{display:none;flex-direction:column;gap:1.25rem;animation:slideIn 0.45s ease-out}
+.screen.active{display:flex}
+
+/* PARCHMENT, Part 1 style */
+.parchment{
+  background:linear-gradient(170deg,var(--paper) 0%,var(--paper2) 40%,var(--paper3) 100%);
+  border:2px solid var(--border);
+  border-radius:4px;
+  padding:2rem 2.25rem;
+  position:relative;
+  box-shadow:4px 4px 0 var(--border2),0 8px 32px rgba(0,0,0,0.5),inset 0 0 60px rgba(160,120,40,0.1);
+}
+.parchment::before{content:'';position:absolute;inset:-1px;border:1px solid var(--aged);border-radius:4px;pointer-events:none}
+.parchment::after{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(139,96,53,0.25);border-radius:2px;pointer-events:none}
+
+/* CHAPTER HEADERS */
+.chapter-head{text-align:center;margin-bottom:1.5rem}
+.chapter-rule{border:none;border-top:2px solid var(--border);margin:0.5rem 0}
+.chapter-rule.thin{border-top-width:1px;border-color:var(--aged)}
+.ornament{color:var(--border);font-size:1.4em;line-height:1;display:block;text-align:center;margin:0.4rem 0;font-family:'Cinzel',serif}
+.year-stamp{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.4rem}
+.chapter-title{font-family:'Cinzel',serif;font-size:1.7rem;font-weight:600;color:var(--ink);line-height:1.2;text-align:center;margin:0.25rem 0}
+.chapter-subtitle{font-family:'IM Fell English',serif;font-size:1rem;color:var(--ink2);font-style:italic;text-align:center}
+.part-tag{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--aged2);text-align:center;margin-bottom:0.5rem;opacity:0.8}
+
+/* BODY TEXT */
+.body-text{font-size:15px;line-height:1.9;color:var(--ink);text-align:justify;hyphens:auto}
+.body-text+.body-text{margin-top:0.75rem}
+.drop-cap::first-letter{font-family:'Cinzel',serif;font-size:3.5em;font-weight:600;float:left;line-height:0.8;margin-right:0.08em;margin-top:0.08em;color:var(--ink);text-shadow:1px 1px 0 var(--aged)}
+
+/* QUOTES */
+.ink-quote{border-left:3px solid var(--border2);background:linear-gradient(90deg,rgba(139,96,53,0.07),transparent);padding:0.85rem 1.25rem;margin:1rem 0;font-style:italic;font-size:14px;line-height:1.85;color:var(--ink2)}
+.quote-src{font-style:normal;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--aged2);margin-top:0.4rem;font-family:'Cinzel',serif}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sc{background:linear-gradient(145deg,var(--paper) 0%,var(--paper3) 100%);border:1px solid var(--border);border-radius:2px;padding:0.55rem 0.75rem;box-shadow:2px 2px 0 rgba(0,0,0,0.15)}
+.sn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--aged2);margin-bottom:2px}
+.sv{font-family:'Cinzel',serif;font-size:1.35rem;color:var(--ink);font-weight:600}
+.strack{height:4px;background:rgba(0,0,0,0.1);border-radius:2px;margin-top:4px;border:1px solid rgba(0,0,0,0.1)}
+.sfill{height:100%;border-radius:1px;transition:width 0.5s}
+
+/* BUTTONS */
+.gbtn{background:linear-gradient(145deg,var(--paper),var(--paper2));border:2px solid var(--border2);border-radius:3px;padding:0.75rem 1.75rem;font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.08em;color:var(--ink);cursor:pointer;align-self:flex-start;transition:all 0.15s;box-shadow:2px 2px 0 rgba(0,0,0,0.2)}
+.gbtn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(0,0,0,0.25);border-color:var(--ink)}
+.gbtn-muted{background:transparent;border:1px solid var(--aged);border-radius:3px;padding:0.75rem 1.5rem;font-family:'Cinzel',serif;font-size:12px;color:var(--aged2);cursor:pointer;align-self:flex-start;letter-spacing:0.08em;transition:all 0.15s}
+.gbtn-muted:hover{border-color:var(--border);color:var(--ink2)}
+.btn-row{display:flex;gap:0.75rem;flex-wrap:wrap}
+
+/* ADVISOR BADGE */
+.advisor-badge{display:inline-block;font-family:'Cinzel',serif;font-size:10px;color:var(--aged2);background:var(--paper3);border:1px solid var(--border);border-radius:2px;padding:3px 10px;margin-bottom:0.5rem;letter-spacing:0.1em}
+
+/* NODE INFO PANEL */
+.node-panel{background:linear-gradient(170deg,var(--paper),var(--paper2));border:2px solid var(--border);border-radius:3px;padding:1.25rem 1.5rem;animation:inkDrip 0.3s ease-out}
+.node-panel-title{font-family:'Cinzel',serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:0.4rem}
+.node-panel-sub{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.75rem}
+.node-commodities{display:flex;gap:6px;flex-wrap:wrap;margin-top:0.6rem}
+.commodity-tag{font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:2px;background:var(--paper3);border:1px solid var(--border);color:var(--ink2);letter-spacing:0.05em}
+
+/* INTEL BOX */
+.intel-box{background:linear-gradient(170deg,var(--paper2),var(--paper3));border:2px solid var(--border);border-radius:3px;padding:0.85rem 1.1rem;color:var(--ink);font-family:'IM Fell English',serif;font-size:13px;line-height:1.7}
+.intel-box-title{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.4rem}
+
+/* MAP WRAPPER */
+.map-wrap{background:#ddd0b0;border:3px solid var(--border2);border-radius:4px;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,0.6),inset 0 0 60px rgba(180,150,100,0.1);position:relative}
+.map-top{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.9rem;background:linear-gradient(180deg,var(--paper2),var(--paper3));border-bottom:2px solid var(--border2)}
+.map-label{font-family:'Cinzel',serif;font-size:11px;color:var(--ink);letter-spacing:0.1em;font-weight:600}
+.map-instruction{font-family:'IM Fell English',serif;font-size:12px;color:var(--ink2);font-style:italic}
+.connections-display{font-family:'Cinzel',serif;font-size:13px;color:var(--aged2);letter-spacing:0.06em;padding:4px 12px;background:var(--paper3);border:1px solid var(--border);border-radius:2px;display:inline-block}
+
+/* EVENT SCREEN */
+.event-prompt{font-size:15px;line-height:1.9;color:var(--ink);margin-bottom:0.75rem;font-family:'IM Fell English',serif}
+.choices{display:flex;flex-direction:column;gap:0.75rem}
+
+/* CHOICE BUTTONS, Commonwealth style */
+.cbtn{
+  display:block;
+  width:100%;
+  background:linear-gradient(145deg,var(--paper2),var(--paper3));
+  border:2px solid var(--border);
+  border-left:8px solid var(--border2);
+  border-radius:4px;
+  padding:1.25rem;
+  margin-bottom:0;
+  cursor:pointer;
+  text-align:left;
+  transition:all 0.2s;
+  box-shadow:4px 4px 0 rgba(0,0,0,0.1);
+  position:relative;
+}
+.cbtn:hover{background:#ecd9ad;transform:translateX(4px);border-color:var(--ink)}
+.cbtn .cl{display:block;font-family:'Cinzel',serif;font-size:13px;font-weight:600;text-transform:uppercase;color:var(--border2);margin-bottom:6px}
+.cbtn .cd{display:block;font-family:'IM Fell English',serif;font-size:15px;color:var(--ink);line-height:1.5;margin-bottom:12px}
+.cbtn .eff{display:flex;gap:8px;flex-wrap:wrap}
+.cbtn .eff span{font-family:'Cinzel',serif;font-size:12px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid rgba(0,0,0,0.15)}
+.cbtn .eff .eff-fiscal{color:#6b4020;background:#fdf5e8;border-color:#8b6035}
+.cbtn .eff .eff-commerce{color:#8a7020;background:#fdf9e0;border-color:#b48521}
+.cbtn .eff .eff-republic{color:#1a2a5a;background:#e8edf4;border-color:#05305c}
+.cbtn .eff .eff-consent{color:#8b1a1a;background:#f9eded;border-color:#8a0808}
+.cbtn .eff .eff-pos{opacity:1}
+.cbtn .eff .eff-neg{opacity:0.85}
+
+/* CONSEQUENCE */
+.consequence-box{background:linear-gradient(170deg,var(--paper2),var(--paper3));border:2px solid var(--border2);padding:1.25rem 1.5rem;position:relative;border-radius:3px}
+.consequence-box .cbox-hd{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.6rem}
+.delta-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem}
+.delta-pill{font-family:'Cinzel',serif;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;font-weight:600}
+.delta-pill.eff-fiscal{color:#6b4020;background:#fdf5e8;border:1px solid #8b6035}
+.delta-pill.eff-commerce{color:#8a7020;background:#fdf9e0;border:1px solid #b48521}
+.delta-pill.eff-republic{color:#1a2a5a;background:#e8edf4;border:1px solid #05305c}
+.delta-pill.eff-consent{color:#8b1a1a;background:#f9eded;border:1px solid #8a0808}
+.delta-pos{background:#e8f4e8;color:#1a4a1a;border:1px solid #5a8a5a}
+.delta-neg{background:#f9eded;color:#8b1a1a;border:1px solid #c08080}
+
+/* OUTCOME */
+.outcome-tag{display:inline-block;font-family:'Cinzel',serif;font-size:10px;padding:3px 12px;border-radius:2px;margin-bottom:0.75rem;letter-spacing:0.12em;text-transform:uppercase}
+.tag-victory{background:#e8f4e8;color:#1a4a1a;border:1px solid #5a8a5a}
+.tag-defeat{background:#f4e8e8;color:#5a1a1a;border:1px solid #8a5a5a}
+
+/* WRONG COUNTER */
+
+/* TUTORIAL STEPS */
+.tutorial-step{background:var(--paper3);border:1px solid var(--border);border-radius:3px;padding:0.85rem 1.1rem;display:flex;gap:0.85rem;align-items:flex-start}
+.tutorial-num{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--border2);font-weight:600;flex-shrink:0;width:28px}
+.tutorial-text{font-size:14px;line-height:1.7;color:var(--ink2)}
+
+/* SCENE SVG, Part 1 style */
+.scene-wrap{width:100%;background:var(--paper2);border:2px solid var(--border);border-radius:3px;overflow:hidden;position:relative;padding:0}
+.scene-svg{width:100%;display:block;mix-blend-mode:multiply}
+
+/* INTRO NAV */
+.intro-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.page-indicator{font-family:'Cinzel',serif;font-size:10px;color:var(--aged2);letter-spacing:0.12em}
+.progress-dots{display:flex;gap:6px;align-items:center}
+.pdot{width:10px;height:10px;border-radius:50%;background:var(--aged);cursor:pointer;transition:background 0.2s;border:1px solid var(--border)}
+.pdot.active{background:var(--border2)}
+.intro-rule{border:none;border-top:1px solid var(--aged);margin:0.85rem 0;opacity:0.6}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .chapter-title{font-size:1.3rem}
+  #atl-atlantic-map{height:300px}
+}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script></head>
+<body>
+<div id="gr">
+<!-- ====================================================
+  INTRO PAGE 1: PROLOGUE
+  ==================================================== -->
+<div class="screen active" id="s-intro1">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">✦ ✦ ✦</p>
+<p class="year-stamp">Anno Domini 1500 — 1649</p>
+<h1 class="chapter-title">How the Old World Ended</h1>
+<hr class="chapter-rule"/>
+<p class="chapter-subtitle">The Anglo-Dutch Revolution &amp; the Birth of the Modern World</p>
+<p class="ornament">❧</p>
+</div>
+<p class="body-text drop-cap">For three centuries before the death of King Charles I, the coasts of England and the Low Countries shared a revolution. The Dutch Republic freed itself from Spanish Habsburg rule after eighty years of war, becoming the first modern state, governed by merchant councils and defended by a professional navy. English soldiers fighting for the Dutch Republic witnessed a wealthy, modernized, and free Protestant society. When they returned to England, they carried a vision of what their country might become.</p>
+<div class="ink-quote">
+      "Bereft of mines, natural harbours and secure frontiers, the Dutch had defied the sea to build dykes and docks and successfully competed for the fisheries, commerce and finance of other nations. To many, the Dutch Golden Age showed what godliness and good government could achieve."
+      <div class="quote-src">— Jonathan Scott, <em>How the Old World Ended</em> (2019)</div>
+</div>
+</div>
+<div class="scene-wrap" style="max-height:200px">
+<svg class="scene-svg" viewbox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="4" id="hatch" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="4">
+<line opacity="0.4" stroke="var(--ink)" stroke-width="0.75" x1="0" x2="0" y1="0" y2="4"></line>
+</pattern>
+<pattern height="6" id="crosshatch" patternunits="userSpaceOnUse" width="6">
+<line opacity="0.6" stroke="var(--ink)" stroke-width="0.8" x1="0" x2="6" y1="0" y2="6"></line>
+<line opacity="0.6" stroke="var(--ink)" stroke-width="0.8" x1="6" x2="0" y1="0" y2="6"></line>
+</pattern>
+</defs>
+<path d="M0,150 Q40,145 80,150 T160,150 T240,150 T320,150 T400,150 T480,150 T560,150 T640,150 T720,150 T760,150" fill="none" stroke="var(--ink)" stroke-width="1.5"></path>
+<path d="M0,165 Q30,170 60,165 T120,165 T180,165 T240,165 T300,165 T360,165 T420,165 T480,165 T540,165 T600,165 T660,165 T720,165 T760,165" fill="none" opacity="0.7" stroke="var(--ink)" stroke-width="1"></path>
+<path d="M0,180 Q50,175 100,180 T200,180 T300,180 T400,180 T500,180 T600,180 T700,180 T760,180" fill="none" stroke="var(--ink)" stroke-width="2"></path>
+<line opacity="0.3" stroke="var(--ink)" stroke-dasharray="4 6" stroke-width="0.5" x1="0" x2="760" y1="20" y2="20"></line>
+<line opacity="0.2" stroke="var(--ink)" stroke-dasharray="2 8" stroke-width="0.5" x1="0" x2="760" y1="40" y2="40"></line>
+<g transform="translate(180, 165)">
+<path d="M -40 -15 L -50 -40 L -10 -35 L 30 -35 L 45 -40 L 40 -15 Z" fill="var(--ink)"></path>
+<line stroke="var(--ink)" stroke-width="2" x1="-20" x2="-20" y1="-35" y2="-90"></line>
+<line stroke="var(--ink)" stroke-width="2.5" x1="10" x2="10" y1="-35" y2="-100"></line>
+<path d="M -20 -80 Q 0 -60 -20 -40 Q -10 -60 -20 -80 Z" fill="url(#crosshatch)" stroke="var(--ink)" stroke-width="1"></path>
+<path d="M 10 -90 Q 35 -65 10 -40 Q 25 -65 10 -90 Z" fill="url(#crosshatch)" stroke="var(--ink)" stroke-width="1"></path>
+</g>
+<g transform="translate(560, 165)">
+<path d="M -45 -15 L -40 -45 C -20 -40 20 -40 45 -35 L 35 -15 Z" fill="var(--ink)"></path>
+<line stroke="var(--ink)" stroke-width="2.5" x1="-15" x2="-15" y1="-40" y2="-100"></line>
+<line stroke="var(--ink)" stroke-width="2" x1="15" x2="15" y1="-40" y2="-90"></line>
+<path d="M -15 -90 Q 10 -65 -15 -45 Q 0 -65 -15 -90 Z" fill="url(#crosshatch)" stroke="var(--ink)" stroke-width="1"></path>
+<path d="M 15 -80 Q 35 -60 15 -45 Q 25 -60 15 -80 Z" fill="url(#crosshatch)" stroke="var(--ink)" stroke-width="1"></path>
+</g>
+<g transform="translate(380, 60)">
+<rect fill="var(--paper2)" height="50" rx="2" stroke="var(--ink)" stroke-width="1.5" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));" width="220" x="-110" y="-25"></rect>
+<rect fill="none" height="42" rx="1" stroke="var(--ink)" stroke-width="0.5" width="212" x="-106" y="-21"></rect>
+<text fill="var(--ink)" font-family="IM Fell English,serif" font-size="13" text-anchor="middle" x="0" y="-3">The North Sea, 1600s.</text>
+<text fill="var(--ink2)" font-family="IM Fell English,serif" font-size="12" font-style="italic" text-anchor="middle" x="0" y="14">Two republics, one destiny.</text>
+</g>
+</svg>
+</div>
+<div class="intro-nav">
+<span class="page-indicator">Introduction — Page I of III</span>
+<div class="progress-dots">
+<div class="pdot active" onclick="goIntro(1)"></div>
+<div class="pdot" onclick="goIntro(2)"></div>
+<div class="pdot" onclick="goIntro(3)"></div>
+</div>
+<button class="gbtn" onclick="goIntro(2)">Continue →</button>
+</div>
+</div>
+<!-- ====================================================
+  INTRO PAGE 2: THE ENGLISH CRISIS
+  ==================================================== -->
+<div class="screen" id="s-intro2">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">❧</p>
+<p class="year-stamp">1618 to 1649</p>
+<h1 class="chapter-title">England in Crisis</h1>
+<hr class="chapter-rule"/>
+<p class="chapter-subtitle">From Civil War to Regicide</p>
+</div>
+<p class="body-text drop-cap">By 1642, England was at war with itself. Parliamentary forces defeated the Royalists at Marston Moor in 1644, and the New Model Army won a decisive victory at Naseby in 1645. Charles I surrendered, was captured, escaped, was recaptured, and finally, in an act that shocked the courts of Europe, was put on trial by his own Parliament. </p>
+<div class="ink-quote">
+      "This was the first public trial and beheading, by his own subjects, of an anointed king. To that extent not only English but European history moved into uncharted waters."
+      <div class="quote-src">— Jonathan Scott, <em>How the Old World Ended</em> (2019)</div>
+</div>
+<p class="body-text">On 30 January 1649, Charles I was beheaded. The monarchy, the House of Lords, and the Church of England were abolished. England became a republic, the first created by the public trial and execution of a reigning monarch. The creation of this republic raised philosophical questions about consent of the governed and the right to dissolve a government that failed its people.</p>
+<div class="ink-quote">
+      "Whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it, and to institute new Government."
+      <div class="quote-src">— Thomas Jefferson, <em>Declaration of Independence</em> (1776)</div>
+</div>
+</div>
+<div class="scene-wrap" style="max-height:220px">
+<svg class="scene-svg" viewbox="0 0 760 220" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="4" id="hatch2" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="4">
+<line opacity="0.4" stroke="var(--ink)" stroke-width="0.75" x1="0" x2="0" y1="0" y2="4"></line>
+</pattern>
+<pattern height="6" id="crosshatch2" patternunits="userSpaceOnUse" width="6">
+<line opacity="0.6" stroke="var(--ink)" stroke-width="0.8" x1="0" x2="6" y1="0" y2="6"></line>
+<line opacity="0.6" stroke="var(--ink)" stroke-width="0.8" x1="6" x2="0" y1="0" y2="6"></line>
+</pattern>
+</defs>
+<g opacity="0.5" stroke="var(--ink)">
+<rect fill="none" height="150" stroke-width="2" width="300" x="230" y="20"></rect>
+<line stroke-width="1.5" x1="230" x2="530" y1="50" y2="50"></line>
+<line stroke-width="1.5" x1="230" x2="530" y1="90" y2="90"></line>
+<line stroke-width="2.5" x1="290" x2="290" y1="20" y2="170"></line>
+<line stroke-width="2.5" x1="380" x2="380" y1="20" y2="170"></line>
+<line stroke-width="2.5" x1="470" x2="470" y1="20" y2="170"></line>
+</g>
+<path d="M -10 230 L -10 190 Q 20 170 30 195 Q 50 175 70 200 Q 90 180 110 195 Q 130 170 150 200 Q 180 175 200 195 Q 230 170 250 200 Q 270 185 290 200 L 290 230 Z" fill="var(--ink)"></path>
+<path d="M 770 230 L 770 190 Q 740 170 730 195 Q 710 175 690 200 Q 670 180 650 195 Q 630 170 610 200 Q 580 175 560 195 Q 530 170 510 200 Q 490 185 470 200 L 470 230 Z" fill="var(--ink)"></path>
+<path d="M 280 230 L 280 200 Q 330 185 380 195 Q 430 185 480 200 L 480 230 Z" fill="var(--ink)"></path>
+<rect fill="var(--paper2)" height="20" stroke="var(--ink)" stroke-width="2" width="260" x="250" y="160"></rect>
+<rect fill="url(#hatch2)" height="20" width="260" x="250" y="160"></rect>
+<g transform="translate(120, 165)">
+<line stroke="var(--ink)" stroke-width="2" x1="-15" x2="-15" y1="40" y2="-70"></line>
+<path d="M -15 40 L -10 -15 L 10 -15 L 15 40 Z" fill="var(--ink)"></path>
+<circle cx="0" cy="-25" fill="var(--ink)" r="9"></circle>
+<path d="M -15 -30 Q 0 -45 15 -30 Q 0 -35 -15 -30" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.5"></path>
+<path d="M -10 -30 Q 0 -40 10 -30" fill="var(--ink)"></path>
+</g>
+<g transform="translate(640, 165)">
+<line stroke="var(--ink)" stroke-width="2" x1="15" x2="15" y1="40" y2="-70"></line>
+<path d="M -15 40 L -10 -15 L 10 -15 L 15 40 Z" fill="var(--ink)"></path>
+<circle cx="0" cy="-25" fill="var(--ink)" r="9"></circle>
+<path d="M -15 -30 Q 0 -45 15 -30 Q 0 -35 -15 -30" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.5"></path>
+<path d="M -10 -30 Q 0 -40 10 -30" fill="var(--ink)"></path>
+</g>
+<g transform="translate(380, 160)">
+<circle cx="0" cy="-35" fill="var(--paper2)" r="40" stroke="var(--ink)" stroke-width="2"></circle>
+<circle cx="0" cy="-35" fill="none" r="34" stroke="var(--ink)" stroke-dasharray="4 2" stroke-width="1"></circle>
+<path d="M 0 -75 L -5 -55 L 4 -35 L -3 -15 L 2 5" fill="none" stroke="var(--ink)" stroke-width="2"></path>
+<g transform="translate(-7, -5)">
+<path d="M 0 -10 L -30 -10 L -25 -20 L 0 -20 Z" fill="var(--ink)"></path>
+<path d="M 0 -20 L 0 -60 L -12 -35 L -25 -45 L -20 -20 Z" fill="url(#crosshatch2)" stroke="var(--ink)" stroke-width="1.5"></path>
+<circle cx="-25" cy="-45" fill="var(--ink)" r="3.5"></circle>
+<path d="M 0 -60 C -6 -60 -6 -68 0 -68 Z" fill="var(--ink)"></path>
+</g>
+<g transform="translate(7, -5)">
+<path d="M 0 -10 L 30 -10 L 25 -20 L 0 -20 Z" fill="var(--ink)"></path>
+<path d="M 0 -20 L 0 -60 L 12 -35 L 25 -45 L 20 -20 Z" fill="url(#crosshatch2)" stroke="var(--ink)" stroke-width="1.5"></path>
+<circle cx="25" cy="-45" fill="var(--ink)" r="3.5"></circle>
+<path d="M 0 -60 C 6 -60 6 -68 0 -68 Z" fill="var(--ink)"></path>
+</g>
+</g>
+<g transform="translate(120, 45)">
+<rect fill="var(--paper2)" height="40" rx="2" stroke="var(--ink)" stroke-width="1.5" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));" width="160" x="-80" y="-20"></rect>
+<text fill="var(--ink)" font-family="IM Fell English,serif" font-size="12" text-anchor="middle" x="0" y="-3">30 January, 1649.</text>
+<text fill="var(--red)" font-family="IM Fell English,serif" font-size="12" font-style="italic" text-anchor="middle" x="0" y="12">The King must die.</text>
+</g>
+<g transform="translate(640, 45)">
+<rect fill="var(--paper2)" height="40" rx="2" stroke="var(--ink)" stroke-width="1.5" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));" width="140" x="-70" y="-20"></rect>
+<text fill="var(--ink)" font-family="IM Fell English,serif" font-size="11" text-anchor="middle" x="0" y="-3">The Lord hath</text>
+<text fill="var(--ink2)" font-family="IM Fell English,serif" font-size="11" font-style="italic" text-anchor="middle" x="0" y="12">delivered him up.</text>
+</g>
+</svg>
+</div>
+<div class="intro-nav">
+<span class="page-indicator">Introduction — Page II of III</span>
+<div class="progress-dots">
+<div class="pdot" onclick="goIntro(1)"></div>
+<div class="pdot active" onclick="goIntro(2)"></div>
+<div class="pdot" onclick="goIntro(3)"></div>
+</div>
+<div class="btn-row">
+<button class="gbtn" onclick="goIntro(1)">← Back</button>
+<button class="gbtn" onclick="goIntro(3)">Continue →</button>
+</div>
+</div>
+</div>
+<!-- ====================================================
+  INTRO PAGE 3: YOUR ROLE
+  ==================================================== -->
+<div class="screen" id="s-intro3">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">✦</p>
+<p class="year-stamp">London — January, 1649</p>
+<h1 class="chapter-title">Your Commission</h1>
+<hr class="chapter-rule"/>
+</div>
+<p class="body-text drop-cap">The King is dead. The new Commonwealth is born into a world dominated by Amsterdam. Their fleet of 10,000 merchant vessels dwarfs England's navy. If England is to survive as a republic, it has to compete. Parliament and its Council of State need wise counsel. You are appointed Advisor to the Council of State.</p>
+<div style="background:var(--paper3);border:2px solid var(--border2);border-left:6px solid var(--border2);border-radius:3px;padding:1rem 1.25rem;margin-bottom:1.25rem">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.5rem">Instructions</div>
+<p style="font-family:'IM Fell English',serif;font-size:14px;line-height:1.8;color:var(--ink)">Seven questions of policy await your judgment. You will be called before Council, asked your opinion, and then dismissed while the members decide. Your opinions may shape policies or be set aside entirely. Be cautious, the Council of State’s decisions will resonate into the future. American leaders will study and interpret these debates when shaping their own political system. Your opinions will shape four pillars of power, each beginning at ten upon a scale of twenty.</p> </div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin:0.5rem 0">
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#1D9E75;letter-spacing:0.1em;margin-bottom:3px">STABILITY</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The political order of the republic. Let it fall and Parliament cannot govern.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#BA7517;letter-spacing:0.1em;margin-bottom:3px">WEALTH</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The treasury and the trading system. Wars are expensive. Fleets are expensive.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#D85A30;letter-spacing:0.1em;margin-bottom:3px">MILITARY</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The readiness and loyalty of the fleet and the New Model Army.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#7F77DD;letter-spacing:0.1em;margin-bottom:3px">SUPPORT</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">Popular and army faith in the republic. Lose it and the men with guns will act.</div>
+</div>
+</div>
+</div>
+<div class="intro-nav">
+<span class="page-indicator">Introduction — Page III of III</span>
+<div class="progress-dots">
+<div class="pdot" onclick="goIntro(1)"></div>
+<div class="pdot" onclick="goIntro(2)"></div>
+<div class="pdot active" onclick="goIntro(3)"></div>
+</div>
+<div class="btn-row">
+<button class="gbtn" onclick="goIntro(2)">← Back</button>
+<button class="gbtn" onclick="startGame()">Begin →</button>
+</div>
+</div>
+</div>
+<!-- ====================================================
+  NAME
+  ==================================================== -->
+<div class="screen" id="s-name">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">✦</p>
+<p class="year-stamp">London — January 1649</p>
+<h1 class="chapter-title">Who Are You, Advisor?</h1>
+<hr class="chapter-rule thin"/>
+</div>
+<p class="body-text" style="margin-bottom:1rem">The Council's secretary requires your name for the record. Enter your name, that history may record your deeds and your failures alike. </p>
+<input autocomplete="off" class="name-input" id="name-input" maxlength="30" placeholder="e.g. Thomas Fairfax" type="text"/>
+</div>
+<p class="name-error" id="name-error">Enter a name to continue.</p>
+<button class="gbtn" id="btn-name-confirm">Take the Oath →</button>
+</div>
+<!-- ====================================================
+  EVENT
+  ==================================================== -->
+<div class="screen" id="s-event">
+<div class="stats-row" id="ev-stats"></div>
+<!-- Historical context parchment -->
+<div class="parchment" id="ev-context-wrap" style="display:none">
+<div class="chapter-head" style="margin-bottom:0.75rem">
+<p class="ornament" style="font-size:1rem">❧ Historical Context ❧</p>
+</div>
+<p class="body-text" id="ev-context-text" style="font-size:14px"></p>
+<div class="ink-quote" id="ev-hist-quote" style="margin-top:0.75rem;font-size:13px"></div>
+<p class="quote-src" id="ev-hist-attr"></p>
+</div>
+<!-- Scene illustration -->
+<div class="scene-wrap" id="ev-scene-wrap">
+<!-- injected by JS -->
+</div>
+<!-- Decision parchment -->
+<div class="parchment">
+<h2 class="chapter-title" id="ev-title" style="text-align:left;font-size:1.3rem"></h2>
+<hr class="chapter-rule thin" style="margin:0.6rem 0"/>
+<p class="body-text" id="ev-prompt" style="font-size:14px;margin-bottom:0.75rem"></p>
+</div>
+<div class="choices" id="ev-choices"></div>
+</div>
+<!-- ====================================================
+  CONSEQUENCE
+  ==================================================== -->
+<div class="screen" id="s-consequence">
+<div class="stats-row" id="con-stats"></div>
+<div class="parchment">
+<div class="scene-wrap" id="con-scene-wrap">
+</div>
+<div class="consequence-box">
+<p class="cbox-hd">The Consequence</p>
+<p class="body-text" id="con-text" style="font-size:14px"></p>
+<div class="delta-row" id="con-deltas"></div>
+</div>
+</div>
+<div class="btn-row">
+<button class="gbtn" id="btn-continue">Continue →</button>
+</div>
+</div>
+<!-- ====================================================
+  FAILURE
+  ==================================================== -->
+<div class="screen" id="s-failure">
+<div class="stats-row" id="fail-stats"></div>
+<div class="parchment">
+<div class="outcome-tag tag-defeat" id="fail-tag"></div>
+<h2 class="chapter-title" id="fail-title" style="text-align:left;font-size:1.4rem;margin-bottom:0.75rem"></h2>
+<hr class="chapter-rule thin" style="margin-bottom:0.75rem"/>
+<p class="body-text" id="fail-desc"></p>
+</div>
+<div class="btn-row">
+<button class="gbtn" id="btn-fail-retry" onclick="retryFromPolicies()">↻ Try Again — Return to First Decision</button>
+<button class="gbtn-muted" id="btn-fail-restart">Begin Anew</button>
+</div>
+</div>
+<!-- ====================================================
+  WAR BRIEFING
+  ==================================================== -->
+<div class="screen" id="s-warbriefing">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">⚓</p>
+<p class="year-stamp">Dover Roads — May 1652</p>
+<h1 class="chapter-title">The First Anglo-Dutch War</h1>
+<hr class="chapter-rule"/>
+<p class="chapter-subtitle">Blake, Monck &amp; Deane versus Lieutenant-Admiral Tromp</p>
+</div>
+<p class="body-text" id="brief-intro" style="font-size:14px"></p>
+<hr class="intro-rule"/>
+<div class="ink-quote">
+      "Is this the Nation that we read / Spent with both Wars, under a Captain dead? / Yet rig a Navy while we dress us late / And ere we Dine, raise and rebuild their State."
+      <div class="quote-src">— Andrew Marvell, <em>The First Anniversary</em> (1654)</div>
+</div>
+</div>
+<!-- Fleet Strength Panel -->
+<div class="parchment" style="padding:1.5rem 2rem">
+<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+<span style="font-size:1.5rem">⚓</span>
+<div>
+<div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2)">Before the Battle</div>
+<div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink)">Your Fleet's Strength</div>
+</div>
+</div>
+<div id="brief-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem"></div>
+</div>
+<!-- Battle Orders Panel -->
+<div class="parchment" style="padding:1.5rem 2rem">
+<div style="text-align:center;margin-bottom:1.25rem">
+<span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2);display:block;margin-bottom:0.3rem">Orders from the Admiralty</span>
+<h2 style="font-family:'Cinzel',serif;font-size:1.6rem;font-weight:600;color:var(--ink);letter-spacing:0.04em">Battle Orders</h2>
+<hr class="chapter-rule" style="margin-top:0.6rem"/>
+</div>
+<!-- Ship type cards -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.1rem">
+<div style="background:var(--paper3);border:1px solid var(--border);border-radius:3px;padding:0.7rem 0.8rem;border-top:3px solid var(--ink2)">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.3rem">Warship</div>
+<div style="font-family:'IM Fell English',serif;font-size:13px;color:var(--ink);line-height:1.5">Requires <strong>1 hit</strong> to sink.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);border-radius:3px;padding:0.7rem 0.8rem;border-top:3px solid var(--aged2)">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.3rem">Merchantman</div>
+<div style="font-family:'IM Fell English',serif;font-size:13px;color:var(--ink);line-height:1.5">Requires <strong>1 hit</strong> to sink. Let 4 escape and the blockade fails.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);border-radius:3px;padding:0.7rem 0.8rem;border-top:3px solid var(--red)">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:0.3rem">Fireship</div>
+<div style="font-family:'IM Fell English',serif;font-size:13px;color:var(--ink);line-height:1.5">Requires <strong>1 hit</strong> to sink. If it reaches your line you will incur catastrophic damage.</div>
+</div>
+</div>
+<div style="background:linear-gradient(135deg,var(--paper2),var(--paper3));border:1px solid var(--border);border-left:4px solid var(--border2);border-radius:3px;padding:0.8rem 1rem;font-family:'IM Fell English',serif;font-size:13px;color:var(--ink2);line-height:1.7">
+<strong style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:0.3rem">Gunnery</strong>
+      Click any vessel to open fire. Clicking open water wastes powder on a miss. <strong>Plug Leaks</strong> spends 2 powder to repair hull. Sink ten Dutch ships before time expires.
+    </div>
+</div>
+<button class="gbtn" id="btn-start-battle" style="align-self:center;font-size:14px;padding:0.85rem 2.5rem">Engage the Dutch →</button>
+</div>
+
+<!-- Atlantic Web merged screens -->
+</div><div class="screen" id="atl-s-intro1">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">⚜ ✦ ⚜</p>
+<p class="year-stamp">Anno Domini 1660, 1689</p>
+<h1 class="chapter-title">The Republic Is Gone</h1>
+<hr class="chapter-rule"/>
+</div>
+<p class="body-text drop-cap" style="margin-top:1.25rem">
+      King Charles II rode into London on his thirtieth birthday. Crowds cheered. Officially, the Commonwealth never happened, the years 1649 to 1660 expunged from the calendar of legal memory. Even so, the Navigation Acts stayed on the books, rewritten and strengthened in 1660. The navy Parliament built flew new flags on the same ships. Arguments about consent and the limits of royal power continued to travel westward, across the Atlantic, alongside tobacco and sugar, and across the Channel to Amsterdam and Rotterdam.
+    </p>
+<hr class="intro-rule"/>
+<div class="scene-wrap" id="atl-scene-intro1"></div>
+<hr class="intro-rule"/>
+<p class="body-text">
+      In 1685 James II inherited the throne, dispensed with Parliament, promoted Catholic officers, and governed as if the revolution had never occurred. Three years later, Protestant lords invited William of Orange to invade. James fled. Parliament offered the Crown to William and Mary with conditions: no suspending of laws, no standing army in peacetime, and no taxation without consent. England became a constitutional monarchy, the Dutch model made English. 
+    </p>
+</div>
+<div class="intro-nav">
+<span class="page-indicator">Introduction, Page I of II</span>
+<div class="progress-dots">
+<div class="pdot active" onclick="goAtlasIntro(1)"></div>
+<div class="pdot" onclick="goAtlasIntro(2)"></div>
+</div>
+<button class="gbtn" id="atl-btn-intro1" onclick="goAtlasIntro(2)">Continue →</button>
+</div>
+</div><div class="screen" id="atl-s-intro2">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">✦</p>
+<p class="year-stamp">London, 1689</p>
+<h1 class="chapter-title">Your New Commission</h1>
+<hr class="chapter-rule"/>
+</div>
+<p class="body-text drop-cap">
+      Your previous role is gone with the republic that created it. You are now an analyst: a Board of Trade correspondent, and a merchant with connections in Edinburgh and Bristol and Barbados. Your influence flows through a network.
+    </p>
+<hr class="intro-rule"/>
+<div style="background:var(--paper3);border:2px solid var(--border2);border-left:6px solid var(--border2);border-radius:3px;padding:1rem 1.25rem;margin-bottom:1.25rem">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.5rem">What You Are Doing</div>
+<p style="font-family:'IM Fell English',serif;font-size:14px;line-height:1.8;color:var(--ink)">You are tracing <strong>The Atlantic Web</strong>, an intercontinental network through which the arguments of the English republic travelled from Amsterdam to London, across three thousand miles of ocean to the colonial assemblies of America. At each node you will face a decision that shaped how this web was built. Your choices affect the four measures below.</p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin:0.5rem 0">
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#1D9E75;letter-spacing:0.1em;margin-bottom:3px">FISCAL-MILITARY POWER</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">England's debt, banking, and naval reach. </div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#BA7517;letter-spacing:0.1em;margin-bottom:3px">TRADE HEALTH</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The health of the Navigation Acts, colonial markets, and merchants on both shores.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#D85A30;letter-spacing:0.1em;margin-bottom:3px">SPREAD OF THEORY</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The spread of constitutional principles across continents.</div>
+</div>
+<div style="background:var(--paper3);border:1px solid var(--border);padding:0.7rem 0.9rem;border-radius:2px">
+<div style="font-family:'Cinzel',serif;font-size:11px;color:#7F77DD;letter-spacing:0.1em;margin-bottom:3px">COLONIAL STABILITY</div>
+<div style="font-size:13px;font-style:italic;color:var(--ink2)">The constitutional loyalty and institutional stability of the American assemblies. </div>
+</div>
+</div>
+</div>
+<div class="intro-nav">
+<span class="page-indicator">Introduction, Page II of II</span>
+<div class="progress-dots">
+<div class="pdot" onclick="goAtlasIntro(1)"></div>
+<div class="pdot active" onclick="goAtlasIntro(2)"></div>
+</div>
+<div class="btn-row">
+<button class="gbtn" onclick="goAtlasIntro(1)">← Back</button>
+<button class="gbtn" id="atl-btn-intro2">Begin the Web →</button>
+</div>
+</div>
+</div><div class="screen" id="atl-s-map">
+<div class="stats-row" id="atl-map-stats"></div>
+<div class="map-wrap">
+<div class="map-top">
+<span class="map-label" id="atl-map-era">The Atlantic Web, 1660–1765</span>
+<span class="map-instruction" id="atl-map-hint">Click the glowing node to investigate</span>
+<span class="connections-display" id="atl-connections-count">Connections: 0</span>
+</div>
+<svg id="atl-atlantic-map" style="width:100%;display:block;height:440px;cursor:default" viewbox="0 0 760 440" xmlns="http://www.w3.org/2000/svg">
+</svg>
+</div>
+<div id="atl-node-info-panel" style="display:none"></div>
+</div><div class="screen" id="atl-s-node-event">
+<div class="stats-row" id="atl-ev-stats"></div>
+<div class="parchment" id="atl-ev-context-wrap" style="display:none">
+<div class="chapter-head" style="margin-bottom:0.75rem">
+<p class="year-stamp" id="atl-ev-context-yr"></p>
+<h2 class="chapter-title" id="atl-ev-context-title" style="font-size:1.2rem"></h2>
+</div>
+<p class="body-text" id="atl-ev-context-text" style="font-size:14px"></p>
+<div class="ink-quote" id="atl-ev-hist-quote" style="margin-top:0.75rem;font-size:13px"></div>
+<p class="quote-src" id="atl-ev-hist-attr"></p>
+</div>
+<div class="parchment">
+<h2 class="chapter-title" id="atl-ev-title" style="text-align:left;font-size:1.25rem"></h2>
+<hr class="chapter-rule thin" style="margin:0.6rem 0"/>
+<p class="event-prompt" id="atl-ev-prompt" style="margin-bottom:0.75rem"></p>
+<div class="ink-quote" id="atl-ev-quote" style="font-size:13px;display:none"></div>
+<p class="quote-src" id="atl-ev-attr" style="display:none"></p>
+</div>
+<div class="choices" id="atl-ev-choices"></div>
+</div><div class="screen" id="atl-s-consequence">
+<div class="stats-row" id="atl-cons-stats"></div>
+<div class="consequence-box" id="atl-cons-box">
+<div class="cbox-hd">Consequence</div>
+<p class="body-text" id="atl-cons-text" style="font-size:14px"></p>
+<div class="delta-row" id="atl-cons-deltas"></div>
+</div>
+<div class="btn-row">
+<button class="gbtn" id="atl-btn-cons-continue">Return to the Web →</button>
+</div>
+</div><div class="screen" id="atl-s-virginia-crossing">
+<div class="parchment">
+<div class="chapter-head">
+<p class="ornament">✦ ✦ ✦</p>
+<p class="year-stamp">London, Autumn, 1764</p>
+<h1 class="chapter-title">The Last Crossing</h1>
+<hr class="chapter-rule"/>
+</div>
+<p class="body-text drop-cap" style="margin-top:1.25rem">
+      You have spent the better part of a year at your desk in London and you know that the web you have been tracing leads to Virginia. Specifically, the House of Burgesses, which has met since 1619 and sat in Williamsburg since 1699, the oldest continuously elected legislative assembly in the Americas. This year Parliament passed the Stamp Act, the first direct tax ever levied on the American colonies. The colonists insist they are inheritors of the English constitutional settlement of 1689, entitled to the same protections against arbitrary taxation that Englishmen at home enjoy.
+    </p>
+<hr style="border:none;border-top:1px solid var(--aged);margin:1.25rem 0;opacity:0.6"/>
+<div class="ink-quote">
+      "There is more equality among the English colonists than among the inhabitants of the mother country. Their manners are more republican, and their governments."
+      <div class="quote-src">— Adam Smith, <em>The Wealth of Nations</em> (1776)</div>
+<hr style="border:none;border-top:1px solid var(--aged);margin:1.25rem 0;opacity:0.6"/>
+</div>
+<p class="body-text">
+      A correspondent in Williamsburg writes that the House of Burgesses will reconvene in May. A young lawyer named Patrick Henry, has told the printer he has resolutions ready. The Royal Governor is waiting on instructions from London that have not arrived. Virginia is the place where everything you have studied arrives together before men who are about to decide what it means.
+    </p>
+<p class="body-text" style="margin-top:0.75rem">
+      A merchant ship out of Bristol sails for the Chesapeake in a fortnight. Six weeks at sea puts you in Williamsburg by late November. The assembly reconvenes in May.
+    </p>
+</div>
+<div class="btn-row">
+<button class="gbtn" id="atl-btn-cross-yes">Book Passage.</button>
+</div>
+</div><div class="screen" id="atl-s-final">
+<!-- COMPLETED ATLANTIC MAP -->
+<div class="map-wrap">
+<div class="map-top">
+<span class="map-label">The Atlantic Web, 1649–1765</span>
+<span class="map-instruction">All threads connected</span>
+</div>
+<svg id="atl-final-map" style="display:block;width:100%;height:auto" viewbox="0 0 760 440"></svg>
+</div>
+<!-- POINTS SUMMARY -->
+<div class="parchment" id="atl-final-summary-panel">
+<div class="chapter-head" style="margin-bottom:1rem">
+<h2 class="chapter-title" style="font-size:1.2rem">YOUR RECORD</h2>
+<hr class="chapter-rule thin"/>
+</div>
+<div class="stats-row" id="atl-final-stats"></div>
+<div id="atl-final-node-summary" style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+<!-- filled by JS -->
+</div>
+</div>
+<div class="btn-row">
+<button class="gbtn" id="atl-btn-play-again">Begin Again</button>
+</div>
+</div></div>
+<!-- ====================================================
+  WAR
+  ==================================================== -->
+<div class="screen" id="s-war">
+<div class="shooter-hud">
+<div class="sc"><div class="sn">English Hull</div><div class="sv" id="sh-hull">100</div><div class="strack"><div class="sfill" id="sh-hull-bar" style="background:#378ADD;width:100%"></div></div></div>
+<div class="sc"><div class="sn">Dutch Sunk</div><div class="sv" id="sh-convoy">0/10</div><div class="strack"><div class="sfill" id="sh-convoy-bar" style="background:#8b1a1a;width:0%"></div></div></div>
+<div class="sc"><div class="sn">Powder</div><div class="sv" id="sh-powder">0</div><div class="strack"><div class="sfill" id="sh-powder-bar" style="background:#BA7517;width:100%"></div></div></div>
+</div>
+<div class="battlefield-wrap">
+<div class="battlefield-top">
+<span class="bf-label" id="sh-phase">Dover Roads</span>
+<span class="bf-label" id="sh-wind-top">Wind: Westerly</span>
+<span class="bf-label" id="sh-timer">90s</span>
+</div>
+<div id="battlefield">
+<!-- sea & sky rendered by JS -->
+<div class="info-banner" id="wind-banner">Wind: Westerly</div>
+<div class="info-banner" id="reload-ring">Ready: Round</div>
+<div id="crosshair"></div>
+<div id="battle-overlay" style="position:absolute;inset:0;z-index:20;background:rgba(245,233,208,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
+<div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:600;color:var(--ink);text-align:center;letter-spacing:0.08em">THE NARROW SEAS<br/><span style="font-size:0.75rem;font-weight:400;color:var(--ink2)">Anno Domini 1652</span></div>
+<div style="font-family:'IM Fell English',serif;font-size:14px;color:var(--ink2);text-align:center;max-width:300px;line-height:1.7">Click enemy ships to fire upon them.<br/>Sink 10 Dutch vessels to win the battle.<br/>Let 4 escape and the blockade fails.</div>
+<button class="gbtn" id="btn-begin-battle" style="font-size:14px;padding:0.9rem 2.5rem;align-self:center">▶ Begin Battle</button>
+</div>
+</div>
+</div>
+<!-- PROMINENT WAR LOG -->
+<div class="war-log-wrap">
+<div class="war-log-header">☠ Battle Dispatch</div>
+<div class="war-log" id="war-log">Dover Roads, May 1652: the Dutch Admiral Tromp refuses the salute. Guns are run out. The First Anglo-Dutch War begins.</div>
+</div>
+<div class="tact-controls">
+<button class="wabtn" id="btn-round"><span class="an">● Load Round Shot</span><span class="ac">Hull-smashing standard gunnery. Click enemy ships to fire.</span></button>
+<button class="wabtn" id="btn-repair"><span class="an">🔨 Plug Leaks</span><span class="ac">Spend 2 powder to restore hull integrity. Delays firing.</span></button>
+<button class="wabtn" id="btn-pause" style="grid-column:1/-1"><span class="an">▮▮ Pause</span><span class="ac">Pause or resume the battle.</span></button>
+</div>
+<p style="font-family:'Cinzel',serif;font-size:11px;color:var(--aged2);letter-spacing:0.06em;margin-top:-0.25rem">Click a vessel to fire upon it. Sink 10 Dutch ships. Let 4 escape and the blockade fails.</p>
+</div>
+<!-- ====================================================
+  OUTCOME
+  ==================================================== -->
+<div class="screen" id="s-outcome">
+<div class="parchment">
+<div class="outcome-tag" id="out-tag"></div>
+<h2 class="chapter-title" id="out-title" style="text-align:left;font-size:1.4rem;margin-bottom:0.75rem"></h2>
+<hr class="chapter-rule thin" style="margin-bottom:0.75rem"/>
+<p class="body-text" id="out-desc"></p>
+<hr class="intro-rule"/>
+<div class="ink-quote" id="out-epilogue"></div>
+</div>
+<div class="stats-row" id="out-stats"></div>
+<div class="btn-row">
+<button class="gbtn" id="btn-restart">Begin Again</button>
+<button class="gbtn" id="btn-retry-battle" onclick="retryBattle()" style="display:none">↻ Try Battle Again</button>
+<button class="gbtn" id="btn-enter-atlantic-web" onclick="window.startAtlanticWeb &amp;&amp; window.startAtlanticWeb(window.playerName, window.stats)">Enter the Atlantic Web →</button>
+</div>
+</div>
+<!-- #gr -->
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+var playerName = 'Advisor';
+var stats = {stability:10,wealth:10,military:10,support:10};
+var evIdx = 0;
+var ws = {};
+var lastConsequenceScene = null;
+
+var STAT_COLORS = {stability:'#1D9E75',wealth:'#BA7517',military:'#D85A30',support:'#7F77DD'};
+var STAT_LABELS = {stability:'Stability',wealth:'Wealth',military:'Military',support:'Support'};
+
+// ============================================================
+// EVENTS — each has a "correct" historical choice + extra context
+// ============================================================
+var EVENTS = [
+  {
+    year:"1649",
+    title:"The Council of State",
+    contextText:"The regicide left a power vacuum no one planned for. The army wants immediate radical reform, but Parliament's lawyers want to move cautiously and secure the gentry's co-operation. Both factions are essential to the republic's survival.",
+    histQuote:'"The arrival of maritime and mercantile policy at the heart of English government was a republican achievement: post-monarchical, pre-Cromwellian. The republic lasted only four and a half years but achieved a radical and permanent break with the past."',
+    histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+    promptFn:function(n){return 'The new Council of State has convened for the first time, '+n+'. The army demands immediate reform of tithes and the law. Parliament\'s lawyers say order must come first. What is your counsel?';},    correctIdx:0,
+    choices:[
+      {label:"Pursue a program of reform.",desc:"Commit to reform of tithes and law, but implement it through Parliament.",effects:{stability:1,wealth:0,military:1,support:2},
+      consequenceFn:function(n){return 'Your counsel is heard. Parliament does not move fast enough for the army or cautiously enough for the gentry. However, both accept Parliament’s authority. This balancing act buys the republic time. The army keeps faith, for now.';}},      
+      {label:"Defer reform! Secure order first.",desc:"Appease the lawyers and gentry. Postpone army demands until the republic is safe.",effects:{stability:-1,wealth:1,military:-2,support:-2},
+      consequenceFn:function(n){return 'Your opinion is noted, but the Council moves toward reform regardless. The republic\'s survival depends on keeping the army\'s loyalty. Parliament makes cautious commitments and the republic holds together. Your counsel for delay, '+n+', was not heeded.';}},    ],
+    sceneFn: drawSceneParliament
+  },
+  {
+    year:"1649",
+    title:"The Diggers of St. George's Hill",
+    contextText:"In April 1649, weeks after the King's execution, Gerrard Winstanley and a small band of poor men occupy common land at St. George's Hill in Surrey, declaring the earth 'a common treasury for all.' They dig and plant and wait for the republic to decide what it believes.",
+    histQuote:'"The present state of the old world is running up like parchment in the fire, and wearing away. The earth is to become a common treasury again... not enclosing any part into any particular hand."',
+    histAttr:'— Gerrard Winstanley, The New Law of Righteousness (1649)',
+    promptFn:function(n){return 'Gerrard Winstanley and a band of poor men have occupied common land at St. George\'s Hill, '+n+'. Landlords demand Parliament act. To send soldiers against men with spades is to tell every poor soldier what the republic thinks his sacrifice was worth. To do nothing risks the gentry\'s loyalty. What do you counsel?';},
+    correctIdx:0,
+    choices:[
+      {label:"Leave them be.",desc:"Do not send soldiers against men with spades. Let the local courts handle it slowly.",effects:{stability:0,wealth:0,military:0,support:3},
+        consequenceFn:function(n){return 'Your counsel is heard. Parliament does not send soldiers to St. George\'s Hill. Landlords pursue their grievances through local courts. Winstanley and his community are eventually broken up by harassment and legal pressure. The soldiers in the regiments note, '+n+', that Parliament did not send men with muskets against men with spades.';}},
+      {label:"Remove them.",desc:"Send a small force. The law is clear. Parliament needs the gentry's loyalty.",effects:{stability:2,wealth:1,military:0,support:-3},
+        consequenceFn:function(n){return 'Your opinion is noted, but Parliament does not send soldiers. The landlords and local courts eventually disperse Winstanley\'s community without Parliamentary soldiers. Your counsel for suppression, '+n+', would have cost the republic the belief, in the barracks of the New Model Army, that this republic was different from the government it replaced.';}},
+      ],
+    sceneFn: drawScenePoor
+  },
+  {
+    year:"1649",
+    title:"The Conscience of the Army",
+    contextText:"Thousands of men fought and died to protect liberty of conscience. The army and the gathered churches demand freedom of conscience for Protestants. Parliament is filled with Presbyterians who regard Independent and Baptist worship as dangerous enthusiasm, barely distinguishable from sedition. They insist on enforcing the Westminster Confession. The Scots demand the Presbyterian settlement they were promised.",
+    histQuote:'"Liberty of conscience, a demand of the Dutch Revolt since 1566, became a focal English requirement. The many parliamentary soldiers who had served with the States\' Army knew from experience that diversity of belief was no hindrance, indeed was a help, to good discipline',
+    histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+    promptFn:function(n){return 'The Council is divided, '+n+'. The army and the gathered churches demand freedom of conscience for Protestants. The Presbyterian council members want the Westminster Confession enforced. What do you tell the Council?';},
+    correctIdx:0,
+    choices:[
+      {label:"Tolerate Protestant sects.",desc:"Hold the army. Grant freedom of conscience. Accept the fracture with Presbyterian MPs.",effects:{stability:-1,wealth:0,military:2,support:3},
+        consequenceFn:function(n){return 'Your counsel is heard. The republic grants liberty of conscience, following Dutch precedent. Presbyterian MPs are furious. Relations with Scotland grow cold. However, the soldiers who carry this republic on their backs feel Parliament is keeping faith. The army holds, '+n+'.';}},
+      {label:"Enforce the Westminster Confession.",desc:"Hold parliament. Sacrifice the sectaries to secure the institution.",effects:{stability:1,wealth:0,military:-3,support:-2},
+        consequenceFn:function(n){return 'Your opinion is noted, but Parliament cannot bring itself to compel uniformity at the army\'s expense. The enforcement you counselled, '+n+', could destroy the army that won the war. The Council lets the sectaries worship.';}},
+      ],
+    sceneFn: drawSceneChurch
+  },
+  {
+    year:"1651",
+    title:"The Union Proposal",
+    contextText:"In the spring of 1651, Parliament dispatched a delegation to The Hague proposing a union of the two republics into a single Protestant free state. A union would neutralize the greatest rival to English trade, but the Dutch just won eighty years of war against Spain to secure their independence and their economy depends on the trade England seeks to neutralize.",
+    histQuote:'"The idea was that these two great republics — equally hated by all monarchies in Europe — should become as one entire body. The Dutch replied affirming the ancient friendship between the two nations. The English countered by demanding a nearer union than formerly with all speed."',
+    histAttr:'— Mercurius Politicus, 1651, quoted in Scott (2019)',
+    promptFn:function(n){return 'Parliament\'s delegation has returned from The Hague, '+n+'. The Dutch refused union. You have been asked to advise the Council before it decides what to do next. Press the proposal harder, or accept the refusal and redirect English ambition elsewhere, toward the Navigation Act that merchants have long demanded?';},
+    correctIdx:1,
+    choices:[
+      {label:"Press the union! Make it a demand!",desc:"The republic cannot stand on its own.",effects:{stability:-1,wealth:-1,military:0,support:-1},
+        consequenceFn:function(n){return 'Your opinion is noted, but the Council does not press the point.';}},
+      {label:"Accept the refusal. Support the Navigation Act.",desc:"England's future lies in commanding its own trade, not in Dutch cooperation.",effects:{stability:1,wealth:2,military:0,support:1},
+        consequenceFn:function(n){return 'Your counsel is heard. Parliament channels its indignation into drafting the Navigation Act of 1651.';}},
+      ],
+    sceneFn: drawSceneMerchant
+  },
+  {
+    year:"1651",
+    title:"The Navigation Act",
+    contextText:"Dutch dominance of the carrying trade is strangling English commerce. The Dutch are also the republic's ideological model, its Protestant neighbour, and the only major power in Europe that is not a monarchy. Parliament proposes the Navigation Act: all goods entering England must arrive on English ships, or on ships of their country of origin. The Dutch delegation has made clear this is an act of war.",
+    histQuote:'"The Navigation Act directed its attention to the imbalance between English and Dutch carrying within English territorial waters. What was required for any such measure to be effective was a transformation in England\'s merchant fleet, and a navy capable of enforcing it. It was the arrival of both between 1649 and 1652 which made the situation revolutionary."',
+    histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+    promptFn:function(n){return 'The Navigation Act is before Parliament, '+n+', a direct blow to Dutch carrying trade which dominates English waters. What is your counsel?';},
+    correctIdx:0,
+    choices:[
+      {label:"Pass the Act! England must command its own trade.",desc:"The republic was built on mercantile ambition. This is its future.",effects:{stability:0,wealth:3,military:1,support:1},
+        consequenceFn:function(n){return 'Your counsel is heard. The Act passes. Dutch ambassadors depart in cold fury. The Navigation Act is the foundation on which England\'s commercial empire will be built, '+n+', but the Dutch will test whether England\'s navy can enforce what Parliament has proclaimed.';}},
+      {label:"Defer the Act! Do not make an enemy of the Dutch.",desc:"The republic cannot afford war with its Protestant neighbour and model.",effects:{stability:1,wealth:-1,military:0,support:-2},
+       consequenceFn:function(n){return 'Your opinion is noted, but Parliament passes the Navigation Act. The Dutch are made to feel the consequences of English power through trade rather than diplomacy.';}},
+      ],
+    sceneFn: drawSceneNavAct
+  },
+  {
+    year:"1651",
+    title:"The Fleet Demands Pay",
+    contextText:"The navy that will have to fight the Dutch has not been paid. Commonwealth sailors endure the same neglect as their predecessors under Charles I. The republic proclaims itself morally superior to the monarchy it replaced. Its sailors are waiting to see if that is true. The dockyards at Chatham have already seen one near-mutiny. Another will destroy the fleet before it ever faces the Dutch.",
+    histQuote:'"The Commonwealth had resources of taxation and fines unknown to the first Stuart kings, and they laboured hard to pay their sailors and to care for the sick or wounded and for the dependents of the slain. The sailors repaid this solicitude by very low rates of desertion compared with the Dutch fleet."',
+    histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+    promptFn:function(n){return 'You have been asked to advise the Admiralty Committee, '+n+'. The treasury cannot fully fund both sailors\' arrears and new frigates. What do you counsel?';},
+    correctIdx:0,
+    choices:[
+      {label:"Pay the arrears! The men come first!",desc:"Settle wages for loyal crews. Build fewer ships.",effects:{stability:1,wealth:-2,military:2,support:3},
+        consequenceFn:function(n){return 'Your counsel is heard. The Admiralty Committee pays its sailors and cares for the sick and wounded. The sailors of the Commonwealth repay this solicitude with very low rates of desertion compared with the Dutch fleet.';}},
+      {label:"Build the frigates! Guns win battles!",desc:"Invest in the building program. The men will have to wait.",effects:{stability:-1,wealth:1,military:3,support:-2},
+        consequenceFn:function(n){return 'Your opinion is noted, but the Admiralty Committee pays its sailors anyway. The Commonwealth had resources of taxation unknown to the Stuart kings and it uses them to settle what is owed. Paid and loyal crews will decide the coming war.';}},
+      ],
+    sceneFn: drawSceneNavy
+  },
+  {
+    year:"1652",
+    title:"The Tarpaulin Question",
+    contextText:"The question of who commands England's ships is ideological. Gentlemen officers are expected to command, bringing social authority and political connections. However, the sea rewards the 'tarpaulin,' a professional mariner raised from common birth.",
+    histQuote:'"There is no comparison betwixt the sea service and the land service. It is absurd to think that a gentleman who in foul weather is sick, or if not sick cannot stand, should be an able seaman or commander."',
+    histAttr:'— Naval memorandum, c.1626, quoted in Scott (2019)',
+    promptFn:function(n){return 'Admiral Blake wants to promote two tarpaulin officers over the heads of gentleman officers with superior social rank. The gentry have written to Parliament. Blake says he will not go into battle with commanders he cannot trust. What do you tell the Committee?';},
+    correctIdx:0,
+    choices:[
+      {label:"Back Blake. Promote by merit!",desc:"Support the Admiral. Let the gentry's complaints go to the Council.",effects:{stability:-1,wealth:0,military:3,support:2},
+        consequenceFn:function(n){return 'Your counsel is heard. The republic promotes by merit. The gentleman officers are furious. Parliament\'s gentry patrons make life difficult. However, Blake\'s fleet becomes formidable, '+n+'.';}},
+      {label:"Accommodate the gentry.",desc:"Parliament needs the gentry's support. Blake must work with the commanders he has.",effects:{stability:1,wealth:0,military:-2,support:-1},
+        consequenceFn:function(n){return 'Your opinion is noted, but the Admiralty Committee promotes by merit. The republic\'s naval revolution is inseparable from anti-aristocratic social reformation of military command. Blake gets his officers, '+n+'.';}},
+      ],
+    sceneFn: drawSceneFleet
+  }
+];
+
+// ============================================================
+// SCENE DRAWING FUNCTIONS
+// ============================================================
+function drawSceneParliament() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="hatchFloor" width="4" height="4" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="4" stroke="var(--ink)" stroke-width="1" opacity="0.3"/>
+      </pattern>
+    </defs>
+
+    <g stroke="var(--ink)" fill="none" opacity="0.15" stroke-width="2">
+      <path d="M40,140 L40,40 Q150,0 260,40 L260,140" />
+      <path d="M500,140 L500,40 Q610,0 720,40 L720,140" />
+    </g>
+
+    <rect y="135" width="760" height="25" fill="url(#hatchFloor)" />
+    <line x1="0" y1="135" x2="760" y2="135" stroke="var(--ink)" stroke-width="2.5"/>
+
+    <rect x="290" y="115" width="180" height="20" fill="var(--paper2)" stroke="var(--ink)" stroke-width="2" />
+
+    <g transform="translate(380,115)">
+      <path d="M-15,0 L15,0 L8,-5 L-8,-5 Z" fill="var(--ink)"/>
+      <rect x="-2" y="-55" width="4" height="50" fill="var(--ink)"/>
+      <circle cx="0" cy="-55" r="4" fill="var(--ink)"/>
+      
+      <g transform="rotate(-5, 0, -50)">
+        <line x1="-45" y1="-50" x2="45" y2="-50" stroke="var(--ink)" stroke-width="2.5"/>
+        <g transform="translate(-45, -50)">
+          <line x1="0" y1="0" x2="-12" y2="25" stroke="var(--ink)" stroke-width="1" opacity="0.6"/>
+          <line x1="0" y1="0" x2="12" y2="25" stroke="var(--ink)" stroke-width="1" opacity="0.6"/>
+          <path d="M-15,25 Q0,35 15,25 Z" fill="var(--ink)"/>
+        </g>
+        <g transform="translate(45, -50)">
+          <line x1="0" y1="0" x2="-12" y2="25" stroke="var(--ink)" stroke-width="1" opacity="0.6"/>
+          <line x1="0" y1="0" x2="12" y2="25" stroke="var(--ink)" stroke-width="1" opacity="0.6"/>
+          <path d="M-15,25 Q0,35 15,25 Z" fill="var(--ink)"/>
+          <g transform="translate(0, 25) scale(0.25)" fill="var(--red)" stroke="var(--ink)" stroke-width="2">
+             <path d="M-40,0 L40,0 L50,-30 L25,-22 L0,-50 L-25,-22 L-50,-30 Z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <g transform="translate(180,135)">
+      <path d="M-15,0 Q-15,-38 0,-38 Q15,-38 15,0 Z" fill="var(--ink)"/>
+      <circle cx="0" cy="-45" r="8" fill="var(--ink)"/>
+    </g>
+
+    ${drawNewStyleFigures(540, 135, 3)}
+
+    <g transform="translate(180,50)">
+      <rect x="-95" y="-18" width="190" height="36" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="5" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">"England shall be a <tspan font-style="italic" fill="var(--red)">Free Commonwealth.</tspan>"</text>
+    </g>
+
+    <g transform="translate(580,50)">
+      <rect x="-85" y="-18" width="170" height="36" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));"/>
+      <text x="0" y="5" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">"The army <tspan font-weight="bold" fill="var(--red)">demands</tspan> the republic!"</text>
+    </g>
+
+  </svg>`;
+}
+
+function drawNewStyleFigures(startX, y, count) {
+  let figures = '';
+  for (let i = 0; i < count; i++) {
+    let x = startX + i * 35;
+    figures += `
+      <g transform="translate(${x},${y})">
+        <path d="M-15,0 Q-15,-38 0,-38 Q15,-38 15,0 Z" fill="var(--ink)" opacity="${0.4 + (i * 0.2)}"/>
+        <circle cx="0" cy="-45" r="8" fill="var(--ink)" opacity="${0.4 + (i * 0.2)}"/>
+      </g>`;
+  }
+  return figures;
+}
+
+function drawSceneMerchant() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="landHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="2" x2="4" y2="2" stroke="var(--ink)" stroke-width="0.6" opacity="0.4"/>
+      </pattern>
+      <pattern id="waterBase" width="8" height="8" patternUnits="userSpaceOnUse">
+        <path d="M0 4 Q 2 1 4 4 T 8 4" fill="none" stroke="var(--ink)" stroke-width="0.5" opacity="0.1"/>
+      </pattern>
+      <pattern id="sailHatch" width="5" height="5" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="5" y2="5" stroke="var(--ink)" stroke-width="0.5" opacity="0.5"/>
+        <line x1="5" y1="0" x2="0" y2="5" stroke="var(--ink)" stroke-width="0.5" opacity="0.5"/>
+      </pattern>
+    </defs>
+
+    <rect x="160" y="130" width="440" height="30" fill="url(#waterBase)" opacity="0.6" />
+    
+    <g stroke="var(--ink)" stroke-width="1.2" opacity="0.3" fill="none">
+       <path d="M160,135 Q215,130 270,135 T380,135 T490,135 T600,135" />
+       <path d="M160,143 Q215,138 270,143 T380,143 T490,143 T600,143" />
+       <path d="M160,151 Q215,146 270,151 T380,151 T490,151 T600,151" />
+    </g>
+
+    <rect x="0" y="130" width="160" height="30" fill="url(#landHatch)" />
+    <line x1="0" y1="130" x2="160" y2="130" stroke="var(--ink)" stroke-width="2.5"/>
+    <line x1="160" y1="130" x2="160" y2="160" stroke="var(--ink)" stroke-width="1.5" opacity="0.8"/>
+    
+    <rect x="600" y="130" width="160" height="30" fill="url(#landHatch)" />
+    <line x1="600" y1="130" x2="760" y2="130" stroke="var(--ink)" stroke-width="2.5"/>
+    <line x1="600" y1="130" x2="600" y2="160" stroke="var(--ink)" stroke-width="1.5" opacity="0.8"/>
+
+    <g fill="var(--ink)" opacity="0.9">
+      <path d="M10,130 L10,100 L20,90 L30,100 L30,130 Z" />
+      <path d="M35,130 L35,85 L50,70 L65,85 L65,130 Z" />
+      <path d="M70,130 L70,75 L85,60 L100,75 L100,130 Z" />
+      <path d="M105,130 L105,95 L115,85 L125,95 L125,130 Z" />
+      <path d="M130,130 L130,105 L155,105 L155,130 Z" />
+    </g>
+
+    <g transform="translate(380, 140)">
+      <path d="M -45 -5 L -55 -30 L -10 -25 L 35 -25 L 50 -30 L 45 -5 Z" fill="var(--ink)"/>
+      <line x1="-25" y1="-25" x2="-25" y2="-85" stroke="var(--ink)" stroke-width="2"/>
+      <line x1="15" y1="-25" x2="15" y2="-95" stroke="var(--ink)" stroke-width="2.5"/>
+      <path d="M -25 -75 Q -5 -55 -25 -35 Q -15 -55 -25 -75 Z" fill="url(#sailHatch)" stroke="var(--ink)" stroke-width="1"/>
+      <path d="M 15 -85 Q 40 -60 15 -35 Q 30 -60 15 -85 Z" fill="url(#sailHatch)" stroke="var(--ink)" stroke-width="1"/>
+      <text x="-22" y="-45" font-family="Cinzel" font-size="6" fill="var(--paper)" opacity="0.8">VOC</text>
+    </g>
+
+    <g transform="translate(680,130)">
+      <path d="M-15,0 Q-15,-38 0,-38 Q15,-38 15,0 Z" fill="var(--ink)"/>
+      <circle cx="0" cy="-45" r="8" fill="var(--ink)"/>
+      <rect x="-18" y="-25" width="12" height="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1" transform="rotate(-10)"/>
+    </g>
+
+    <g transform="translate(160,35)">
+      <rect x="-90" y="-18" width="180" height="36" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="5" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">Amsterdam grows <tspan fill="var(--red)">rich</tspan></text>
+    </g>
+
+    <g transform="translate(560,80)">
+      <rect x="-85" y="-18" width="170" height="36" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));"/>
+      <text x="0" y="5" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)" font-style="italic">"...while England sleeps!"</text>
+    </g>
+  </svg>`;
+}
+
+function drawSceneChurch() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="stoneHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="var(--ink)" stroke-width="0.5" opacity="0.2"/>
+      </pattern>
+      <pattern id="floorHatch" width="40" height="10" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="10" x2="40" y2="10" stroke="var(--ink)" stroke-width="0.5" opacity="0.1"/>
+      </pattern>
+    </defs>
+
+    <rect width="760" height="115" fill="var(--paper2)" opacity="0.3"/>
+    <line x1="0" y1="115" x2="760" y2="115" stroke="var(--ink)" stroke-width="1" opacity="0.4"/>
+
+    <g fill="url(#stoneHatch)" stroke="var(--ink)" stroke-width="1.2" opacity="0.4">
+       <path d="M120,115 L120,40 Q150,-10 180,40 L180,115 Z" />
+       <path d="M580,115 L580,40 Q610,-10 640,40 L640,115 Z" />
+    </g>
+
+    <g transform="translate(380, 80)" opacity="0.15">
+      <rect x="-3" y="-30" width="6" height="50" fill="var(--ink)"/>
+      <rect x="-12" y="-18" width="24" height="6" fill="var(--ink)"/>
+    </g>
+
+    <g transform="translate(380, 115)">
+      <rect x="-25" y="-15" width="50" height="35" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
+      <line x1="-25" y1="-8" x2="25" y2="-8" stroke="var(--ink)" stroke-width="0.5"/>
+      
+      <path d="M-12,-15 Q-12,-55 0,-55 Q12,-55 12,-15 Z" fill="var(--ink)"/>
+      <circle cx="0" cy="-62" r="7" fill="var(--ink)"/>
+      
+      <g transform="translate(8, -58) rotate(5)">
+        <rect x="0" y="0" width="16" height="22" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>
+        <rect x="6" y="4" width="4" height="14" fill="var(--ink)" opacity="0.8"/>
+        <rect x="3" y="8" width="10" height="4" fill="var(--ink)" opacity="0.8"/>
+      </g>
+    </g>
+
+    <rect y="115" width="760" height="45" fill="url(#floorHatch)"/>
+
+    <g transform="translate(180, 145)">
+       <rect x="-150" y="0" width="140" height="15" fill="var(--ink)" opacity="0.1"/>
+       <line x1="-150" y1="0" x2="-10" y2="0" stroke="var(--ink)" stroke-width="2"/>
+       ${[-130, -90, -50].map(x => `
+         <path d="M${x-10},0 Q${x-10},-30 ${x},-30 Q${x+10},-30 ${x+10},0 Z" fill="var(--ink)"/>
+         <circle cx="${x}" cy="-36" r="6" fill="var(--ink)"/>
+       `).join('')}
+    </g>
+
+    <g transform="translate(580, 145)">
+       <rect x="10" y="0" width="140" height="15" fill="var(--ink)" opacity="0.1"/>
+       <line x1="10" y1="0" x2="150" y2="0" stroke="var(--ink)" stroke-width="2"/>
+       ${[30, 70, 110].map(x => `
+         <path d="M${x-10},0 Q${x-10},-30 ${x},-30 Q${x+10},-30 ${x+10},0 Z" fill="var(--ink)"/>
+         <circle cx="${x}" cy="-36" r="6" fill="var(--ink)"/>
+       `).join('')}
+    </g>
+
+    <g transform="translate(560, 50)">
+      <rect x="-110" y="-22" width="220" height="44" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="-2" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">The Spirit moveth as</text>
+      <text x="0" y="12" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--red)" font-style="italic">it willeth — be free!</text>
+    </g>
+
+  </svg>`;
+}
+
+function drawSceneNavy() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="landHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="2" x2="4" y2="2" stroke="var(--ink)" stroke-width="0.6" opacity="0.4"/>
+      </pattern>
+      <pattern id="wavySea" width="20" height="10" patternUnits="userSpaceOnUse">
+        <path d="M0 5 Q 5 0 10 5 T 20 5" fill="none" stroke="var(--ink)" stroke-width="0.7" opacity="0.3"/>
+      </pattern>
+      <pattern id="sailHatch" width="5" height="5" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="5" y2="5" stroke="var(--ink)" stroke-width="0.5" opacity="0.5"/>
+        <line x1="5" y1="0" x2="0" y2="5" stroke="var(--ink)" stroke-width="0.5" opacity="0.5"/>
+      </pattern>
+    </defs>
+
+    <rect x="240" y="131" width="520" height="29" fill="url(#wavySea)" />
+    <rect x="0" y="130" width="240" height="30" fill="url(#landHatch)" />
+    <line x1="0" y1="130" x2="240" y2="130" stroke="var(--ink)" stroke-width="2"/>
+    <line x1="240" y1="130" x2="240" y2="160" stroke="var(--ink)" stroke-width="1.5"/>
+
+    <g transform="translate(80, 130)">
+      ${[ -40, -15, 10, 35 ].map((x, i) => `
+        <g transform="translate(${x}, 0)">
+          <path d="M-8,0 Q-8,-25 0,-25 Q8,-25 8,0 Z" fill="var(--ink)"/>
+          <circle cx="0" cy="-30" r="5" fill="var(--ink)"/>
+          ${i === 2 ? `
+            <g transform="translate(0, -55) rotate(-3)">
+              <rect x="-25" y="-10" width="50" height="18" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2"/>
+              <text x="0" y="3" text-anchor="middle" font-family="Cinzel" font-size="8" fill="var(--red)" font-weight="bold">PAY US</text>
+              <line x1="0" y1="8" x2="0" y2="25" stroke="var(--ink)" stroke-width="2"/>
+            </g>
+          ` : ''}
+        </g>
+      `).join('')}
+    </g>
+
+    <g transform="translate(580, 142) scale(1.4)">
+      <path d="M -45 -5 L -55 -30 L -10 -25 L 35 -25 L 50 -30 L 45 -5 Z" fill="var(--ink)"/>
+      <g opacity="0.3">
+        <rect x="-35" y="-20" width="5" height="4" fill="var(--paper)"/>
+        <rect x="-15" y="-18" width="5" height="4" fill="var(--paper)"/>
+        <rect x="5" y="-18" width="5" height="4" fill="var(--paper)"/>
+        <rect x="25" y="-20" width="5" height="4" fill="var(--paper)"/>
+      </g>
+      <line x1="-25" y1="-25" x2="-25" y2="-85" stroke="var(--ink)" stroke-width="2"/>
+      <line x1="15" y1="-25" x2="15" y2="-95" stroke="var(--ink)" stroke-width="2.5"/>
+      <path d="M -25 -75 Q -5 -55 -25 -35 Q -15 -55 -25 -75 Z" fill="url(#sailHatch)" stroke="var(--ink)" stroke-width="1"/>
+      <path d="M 15 -85 Q 40 -60 15 -35 Q 30 -60 15 -85 Z" fill="url(#sailHatch)" stroke="var(--ink)" stroke-width="1"/>
+      <g transform="translate(15, -95)">
+        <rect x="0" y="0" width="18" height="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="0.8"/>
+        <line x1="9" y1="0" x2="9" y2="12" stroke="var(--red)" stroke-width="1.5"/>
+        <line x1="0" y1="6" x2="18" y2="6" stroke="var(--red)" stroke-width="1.5"/>
+      </g>
+    </g>
+
+    <g transform="translate(200, 130)">
+      <path d="M-12,0 Q-12,-45 0,-45 Q12,-45 12,0 Z" fill="var(--ink)"/>
+      <circle cx="0" cy="-55" r="9" fill="var(--ink)"/>
+    </g>
+
+    <g transform="translate(380, 45)">
+      <rect x="-95" y="-22" width="190" height="44" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="-2" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">More ships! England's</text>
+      <text x="0" y="12" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--red)" font-style="italic">might is on the sea.</text>
+    </g>
+
+  </svg>`;
+}
+
+function drawSceneNavAct() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="panelHatch" width="10" height="10" patternUnits="userSpaceOnUse">
+        <line x1="5" y1="0" x2="5" y2="10" stroke="var(--ink)" stroke-width="0.5" opacity="0.2"/>
+      </pattern>
+    </defs>
+
+    <rect width="760" height="135" fill="url(#panelHatch)" opacity="0.5"/>
+    <rect y="135" width="760" height="25" fill="var(--ink)" opacity="0.1"/>
+    <line x1="0" y1="135" x2="760" y2="135" stroke="var(--ink)" stroke-width="2"/>
+
+    <g transform="translate(380, 75)">
+      <rect x="-85" y="-60" width="170" height="110" fill="var(--paper)" stroke="var(--ink)" stroke-width="2" rx="2" style="filter: drop-shadow(6px 6px 0px rgba(0,0,0,0.15));"/>
+      
+      <text x="0" y="-40" text-anchor="middle" font-family="Cinzel,serif" font-size="12" font-weight="bold" fill="var(--ink)">NAVIGATION ACT</text>
+      <text x="0" y="-28" text-anchor="middle" font-family="Cinzel,serif" font-size="8" fill="var(--ink)" opacity="0.8">ANNO DOMINI 1651</text>
+      
+      <line x1="-60" y1="-20" x2="60" y2="-20" stroke="var(--ink)" stroke-width="0.5"/>
+      
+      <text x="0" y="-5" text-anchor="middle" font-family="IM Fell English,serif" font-size="9" fill="var(--ink)" font-style="italic">That no Goods or Commodities</text>
+      <text x="0" y="8" text-anchor="middle" font-family="IM Fell English,serif" font-size="9" fill="var(--ink)" font-style="italic">shall be Imported into England</text>
+      <text x="0" y="21" text-anchor="middle" font-family="IM Fell English,serif" font-size="9" fill="var(--ink)" font-style="italic">but in English ships...</text>
+
+      <g transform="translate(0, 38)">
+        <circle r="12" fill="var(--red)" opacity="0.2"/>
+        <circle r="10" fill="none" stroke="var(--red)" stroke-width="1.5"/>
+      </g>
+    </g>
+
+    <g transform="translate(140, 135)">
+      <path d="M-15,0 Q-15,-45 0,-45 Q15,-45 15,0 Z" fill="var(--ink)"/>
+      <circle cx="0" cy="-55" r="9" fill="var(--ink)"/>
+      <g transform="translate(0, -90)">
+        <rect x="-85" y="-18" width="170" height="36" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2"/>
+        <text x="0" y="-2" text-anchor="middle" font-family="IM Fell English,serif" font-size="10" fill="var(--ink)">England must rule</text>
+        <text x="0" y="10" text-anchor="middle" font-family="IM Fell English,serif" font-size="10" fill="var(--red)" font-style="italic">the carrying trade!</text>
+      </g>
+    </g>
+
+    <g transform="translate(620, 135)">
+      <path d="M-15,0 Q-15,-45 0,-45 Q15,-45 15,0 Z" fill="var(--ink)" opacity="0.8"/>
+      <circle cx="0" cy="-55" r="9" fill="var(--ink)" opacity="0.8"/>
+      
+      <g transform="translate(0, -95)">
+        <rect x="-85" y="-18" width="170" height="36" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2" rx="2" style="filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.1));"/>
+        <text x="0" y="-2" text-anchor="middle" font-family="IM Fell English,serif" font-size="10" fill="var(--ink)">This Act is an act</text>
+        <text x="0" y="10" text-anchor="middle" font-family="IM Fell English,serif" font-size="10" fill="var(--red)" font-style="italic">of War upon Holland!</text>
+      </g>
+    </g>
+
+  </svg>`;
+}
+
+function drawSceneFleet() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <rect width="760" height="160" fill="var(--paper)" opacity="0.1"/>
+
+    <g transform="translate(380, 32)">
+      <rect x="-105" y="-22" width="210" height="44" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="-2" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink)">Merit made this fleet.</text>
+      <text x="0" y="12" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--red)" font-style="italic">Rank shall not ruin it.</text>
+    </g>
+
+    <g transform="translate(380, 85)">
+      <path d="M-5,65 L5,65 L3,0 L-3,0 Z" fill="var(--ink)" opacity="0.9"/>
+      <rect x="-12" y="60" width="24" height="4" fill="var(--ink)"/> 
+      
+      <circle cx="0" cy="0" r="2.5" fill="var(--ink)"/>
+
+      <g transform="rotate(5)">
+        <line x1="-160" y1="0" x2="160" y2="0" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        
+        <g transform="translate(-160, 0) rotate(-5)">
+          <path d="M0,0 L-30,40 M0,0 L30,40" stroke="var(--ink)" stroke-width="1" opacity="0.6"/>
+          <path d="M-40,40 Q-40,58 0,58 Q40,58 40,40 Z" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2"/>
+          
+          <g transform="translate(0, 40)">
+            ${[ -10, 10 ].map(x => `
+              <g transform="translate(${x}, 0)">
+                <path d="M-6,0 Q-6,-20 0,-20 Q6,-20 6,0 Z" fill="var(--ink)"/>
+                <circle cx="0" cy="-25" r="4.5" fill="var(--ink)"/>
+              </g>
+            `).join('')}
+            <text x="0" y="-45" text-anchor="middle" font-family="Cinzel" font-size="9" fill="var(--red)" font-weight="bold">MERIT</text>
+          </g>
+        </g>
+
+        <g transform="translate(160, 0) rotate(-5)">
+          <path d="M0,0 L-30,35 M0,0 L30,35" stroke="var(--ink)" stroke-width="1" opacity="0.4"/>
+          <path d="M-40,35 Q-40,53 0,53 Q40,53 40,35 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" opacity="0.7"/>
+          
+          <g transform="translate(0, 35)" opacity="0.4">
+            ${[ -18, 0, 18 ].map(x => `
+              <g transform="translate(${x}, 0)">
+                <path d="M-5,0 Q-5,-16 0,-16 Q5,-16 5,0 Z" fill="var(--ink)"/>
+                <path d="M-7,-16 L-5,-24 L-2,-19 L0,-24 L2,-19 L5,-24 L7,-16 Z" fill="var(--ink)" stroke="none"/>
+              </g>
+            `).join('')}
+            <text x="0" y="-45" text-anchor="middle" font-family="Cinzel" font-size="9" fill="var(--red)" font-weight="bold">LINEAGE</text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>`;
+}
+
+function drawScenePoor() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="landHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="2" x2="4" y2="2" stroke="var(--ink)" stroke-width="0.6" opacity="0.4"/>
+      </pattern>
+      <pattern id="soilHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="var(--ink)" stroke-width="1" opacity="0.3"/>
+      </pattern>
+    </defs>
+
+    <rect width="760" height="130" fill="var(--paper)" opacity="0.2"/>
+    <rect y="130" width="760" height="30" fill="url(#landHatch)" />
+    <line x1="0" y1="130" x2="760" y2="130" stroke="var(--ink)" stroke-width="2"/>
+
+    <path d="M10,130 L320,130 L310,155 L20,155 Z" fill="url(#soilHatch)" opacity="0.6"/>
+
+    <g transform="translate(100, 130)">
+      ${Array.from({length: 16}).map((_, i) => `
+        <g transform="translate(${(i * 18) - 70}, 15)">
+          <path d="M0,0 L0,-${10 + (i % 7)} M0,-6 L-4,-10 M0,-6 L4,-10" fill="none" stroke="var(--ink)" stroke-width="1.2" opacity="${0.5 + (i % 2) * 0.4}"/>
+        </g>
+      `).join('')}
+
+      ${[0, 130].map((x, i) => `
+        <g transform="translate(${x}, 0)">
+          <path d="M-12,0 Q-12,-45 0,-45 Q12,-45 12,0 Z" fill="var(--ink)"/>
+          <circle cx="0" cy="-45" r="10" fill="var(--ink)"/>
+          <g transform="translate(${i === 0 ? -18 : 18}, -8) rotate(${i === 0 ? -12 : 12})">
+            <line x1="0" y1="0" x2="0" y2="-70" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="-10" y="0" width="20" height="18" fill="var(--ink)"/>
+          </g>
+        </g>
+      `).join('')}
+    </g>
+
+    <g transform="translate(560, 130)">
+      <g transform="translate(-50, 0)">
+        <path d="M-12,0 Q-12,-45 0,-45 Q12,-45 12,0 Z" fill="var(--ink)"/>
+        <circle cx="0" cy="-45" r="10" fill="var(--ink)"/>
+        <ellipse cx="10" cy="-25" rx="12" ry="7" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2"/>
+      </g>
+      <g transform="translate(0, 0)">
+        <path d="M-9,0 Q-9,-30 0,-30 Q9,-30 9,0 Z" fill="var(--ink)"/>
+        <circle cx="0" cy="-30" r="7" fill="var(--ink)"/>
+      </g>
+      <g transform="translate(55, 0)">
+        <path d="M-12,0 Q-12,-45 0,-45 Q12,-45 12,0 Z" fill="var(--ink)"/>
+        <circle cx="0" cy="-45" r="10" fill="var(--ink)"/>
+        <ellipse cx="-10" cy="-25" rx="12" ry="7" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.2"/>
+      </g>
+    </g>
+
+    <g transform="translate(380, 45)">
+      <rect x="-110" y="-25" width="220" height="50" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" rx="2" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));"/>
+      <text x="0" y="-3" text-anchor="middle" font-family="IM Fell English" font-size="13" fill="var(--ink)" font-weight="bold">We fought for bread</text>
+      <text x="0" y="14" text-anchor="middle" font-family="IM Fell English" font-size="13" fill="var(--red)" font-style="italic">as well as liberty!</text>
+    </g>
+
+  </svg>`;
+}
+
+// ============================================================
+// FAILURE SCREENS
+// ============================================================
+var FAILURE_SCREENS = {
+  stability:{tag:'Cromwell Dissolves Parliament',title:'The Republic Falls to the Sword',
+    descFn:function(n){return 'Political order collapsed, '+n+'. On 20 April 1653, Oliver Cromwell marches into the chamber with his musketeers and declares, "You are no Parliament!" The Commonwealth is dissolved'}},
+  wealth:{tag:'The Treasury Is Empty',title:'England Is Bankrupt',
+    descFn:function(n){return 'The republic dissolves with an unpaid bill, '+n+'. Parliament cannot fund its own administration. England returns to monarchy.'}},
+  military:{tag:'The Army Dissolves',title:'England Defenceless',
+    descFn:function(n){return 'The New Model Army is fractured, '+n+'. The republic that was born from military victory is destroyed by military collapse. A King will return.'}},
+  support:{tag:'Popular Uprising',title:'The People Turn Against the Republic',
+    descFn:function(n){return 'London is ungovernable, '+n+'. Without popular legitimacy, the Commonwealth cannot survive the winter. The old order reasserts itself.'}}
+};
+
+// ============================================================
+// UTILITY
+// ============================================================
+function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});var el=document.getElementById(id);el.classList.add('active');window.scrollTo(0,0)}
+function clamp(v){return Math.max(0,Math.min(20,v))}
+function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+
+function renderStats(cid){
+  var keys=['stability','wealth','military','support'],html='';
+  keys.forEach(function(k){
+    var v=clamp(stats[k]);
+    html+='<div class="sc"><div class="sn">'+STAT_LABELS[k]+'</div><div class="sv">'+v+'</div>'
+      +'<div class="strack"><div class="sfill" style="width:'+(v*5)+'%;background:'+STAT_COLORS[k]+'"></div></div></div>';
+  });
+  document.getElementById(cid).innerHTML=html;
+}
+
+function renderDeltas(effects){
+  // Define the keys and their CSS class nicknames
+  var mapping = {
+    stability: 'stab',
+    wealth: 'weal',
+    military: 'mili',
+    support: 'supp'
+  };
+  
+  var html = '';
+  Object.keys(mapping).forEach(function(k){
+    var v = effects[k] || 0;
+    if(v === 0) return; // Skip stats that didn't change
+    
+    // Create the pill with the specific color class (stab, weal, etc)
+    html += '<span class="delta-pill ' + mapping[k] + '">' + 
+            STAT_LABELS[k] + ' ' + (v > 0 ? '+' : '') + v + 
+            '</span>';
+  });
+  
+  document.getElementById('con-deltas').innerHTML = html;
+}
+
+function checkFailure(){
+  var keys=['stability','wealth','military','support'];
+  for(var i=0;i<keys.length;i++){if(stats[keys[i]]<=0)return keys[i];}
+  return null;
+}
+
+// ============================================================
+// INTRO NAVIGATION
+// ============================================================
+function goIntro(n){show('s-intro'+n);document.querySelectorAll('.pdot').forEach(function(d,i){d.classList.toggle('active',i===n-1)})}
+function startGame(){show('s-name');document.getElementById('name-input').focus()}
+
+// ============================================================
+// NARRATIVE FLOW
+// ============================================================
+
+function showEvent(){
+  if(evIdx>=EVENTS.length){showWarBriefing();return;}
+  var ev=EVENTS[evIdx];
+  show('s-event');
+  renderStats('ev-stats');
+  document.getElementById('ev-title').textContent=ev.title;
+  document.getElementById('ev-prompt').textContent=ev.promptFn(playerName);
+  // Context panel
+  var ctxWrap=document.getElementById('ev-context-wrap');
+  if(ev.contextText){
+    ctxWrap.style.display='';
+    document.getElementById('ev-context-text').textContent=ev.contextText;
+    document.getElementById('ev-hist-quote').textContent=ev.histQuote||'';
+    document.getElementById('ev-hist-attr').textContent=ev.histAttr||'';
+  } else { ctxWrap.style.display='none'; }
+  // Scene
+  var sceneWrap=document.getElementById('ev-scene-wrap');
+  if(ev.sceneFn){sceneWrap.style.display='';sceneWrap.innerHTML=ev.sceneFn();}
+  else {sceneWrap.style.display='none';}
+  // Choices
+var html = '';
+  ev.choices.forEach(function(c, i) {
+    // We build the points boxes here
+    var effHTML = '<div class="eff">';
+    if (c.effects.stability) effHTML += '<span class="stab">Stability ' + (c.effects.stability > 0 ? '+' : '') + c.effects.stability + '</span>';
+    if (c.effects.wealth)    effHTML += '<span class="weal">Wealth '    + (c.effects.wealth > 0 ? '+' : '') + c.effects.wealth + '</span>';
+    if (c.effects.military)  effHTML += '<span class="mili">Military '  + (c.effects.military > 0 ? '+' : '') + c.effects.military + '</span>';
+    if (c.effects.support)   effHTML += '<span class="supp">Support '   + (c.effects.support > 0 ? '+' : '') + c.effects.support + '</span>';
+    effHTML += '</div>';
+
+    // We build the full button string
+    html += '<button class="cbtn" data-idx="' + i + '">' +
+            '<span class="cl">' + c.label + '</span>' +
+            '<span class="cd">' + c.desc + '</span>' +
+            effHTML + 
+            '</button>';
+  });
+
+  document.getElementById('ev-choices').innerHTML = html;
+  
+  // Re-attach the click listeners
+  document.getElementById('ev-choices').querySelectorAll('.cbtn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      pickChoice(parseInt(this.getAttribute('data-idx')));
+    });
+  });
+}
+
+function pickChoice(idx){
+  var ev=EVENTS[evIdx];
+  var choice=ev.choices[idx];
+  var keys=['stability','wealth','military','support'];
+  keys.forEach(function(k){stats[k]=clamp(stats[k]+(choice.effects[k]||0));});
+  evIdx++;
+  // Show consequence scene
+  var conScene=document.getElementById('con-scene-wrap');
+  if(ev.sceneFn){conScene.innerHTML=ev.sceneFn();conScene.style.display='flex';}
+  else{conScene.style.display='none';}
+  show('s-consequence');
+  renderStats('con-stats');
+  renderDeltas(choice.effects);
+  document.getElementById('con-text').textContent=choice.consequenceFn(playerName);
+
+  var failed=checkFailure();
+  var btn=document.getElementById('btn-continue');
+  btn.onclick=null;
+
+  if(failed){
+    btn.textContent='The republic falls\u2026';
+    btn.onclick=function(){showFailure(failed)};
+    return;
+  }
+  if(evIdx>=EVENTS.length){btn.textContent='Prepare for battle \u2192';btn.onclick=showWarBriefing;}
+  else{btn.textContent='Continue \u2192';btn.onclick=showEvent;}
+}
+
+function showFailure(stat){
+  show('s-failure');
+  renderStats('fail-stats');
+  var f=FAILURE_SCREENS[stat];
+  document.getElementById('fail-tag').textContent=f.tag;
+  document.getElementById('fail-title').textContent=f.title;
+  document.getElementById('fail-desc').textContent=f.descFn(playerName);
+}
+
+// ============================================================
+// WAR BRIEFING
+// ============================================================
+function showWarBriefing(){
+  show('s-warbriefing');
+  
+  // Internal Calculations (preserved for the description text)
+  var hullVal = 55 + stats.military * 3 + stats.stability;
+  var powderVal = 10 + Math.floor(stats.wealth * 1.1);
+  var reloadSpd = Math.max(900, 1800 - stats.military * 55);
+  var morale = Math.max(1, 5 + Math.floor((stats.support + stats.stability) / 4));
+
+  // Intro text
+  document.getElementById('brief-intro').textContent =
+    'Lieutenant-Admiral Maarten Tromp enters the Narrow Seas with the Dutch fleet, ' + playerName + '. The choices of the past three years have made this fleet what it is. England\'s republic will be won or lost on this water.';
+
+  // Updated Stat Cards
+  var reloadLabel = reloadSpd < 950 ? 'Elite' : reloadSpd < 1250 ? 'Medium' : 'Slow';
+  var moraleLabel = morale >= 12 ? 'High' : morale >= 7 ? 'Steady' : 'Wavering';
+  function statCard(label, value, subtext, barPct, barColor){
+    return '<div style="background:var(--paper3);border:1px solid var(--border);border-radius:3px;padding:0.75rem 0.9rem;position:relative;overflow:hidden">'
+      +'<div style="position:absolute;bottom:0;left:0;height:3px;width:'+barPct+'%;background:'+barColor+';border-radius:0 2px 0 0;opacity:0.7"></div>'
+      +'<div style="font-family:\'Cinzel\',serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged2);margin-bottom:0.25rem">'+label+'</div>'
+      +'<div style="font-family:\'Cinzel\',serif;font-size:1.4rem;font-weight:600;color:var(--ink);line-height:1.1">'+value+'</div>'
+      +'<div style="font-family:\'IM Fell English\',serif;font-size:11px;color:var(--ink2);font-style:italic;margin-top:0.2rem;line-height:1.4">'+subtext+'</div>'
+      +'</div>';
+  }
+  document.getElementById('brief-stats').innerHTML =
+    statCard('Hull Integrity', hullVal, 'Military '+stats.military+' + Stability '+stats.stability, Math.min(100,Math.round(hullVal/120*100)), '#378ADD')
+    +statCard('Powder Magazine', powderVal+' rounds', 'Wealth '+stats.wealth+'', Math.min(100,Math.round(powderVal/32*100)), '#BA7517')
+    +statCard('Crew Morale', moraleLabel, 'Support '+stats.support+' + Stability '+stats.stability, Math.min(100,Math.round(morale/20*100)), '#1a4a1a')
+    +statCard('Reload Speed', reloadLabel, 'Military '+stats.military+''+(reloadSpd/1000).toFixed(1)+'s', Math.min(100,Math.round((1800-reloadSpd)/900*100)), '#8b1a1a');
+}
+
+// ============================================================
+// WAR GAME
+// ============================================================
+function beginWar(){
+  ws={
+    hullMax:55+stats.military*3+stats.stability,
+    hull:55+stats.military*3+stats.stability,
+    powderMax:10+Math.floor(stats.wealth*1.1),
+    powder:10+Math.floor(stats.wealth*1.1),
+    morale:clamp(5+Math.floor((stats.support+stats.stability)/4)),
+    score:0,escaped:0,sunk:0,required:10,
+    timeLeft:80,reload:0,
+    reloadMax:Math.max(900,1800-stats.military*55),
+    shot:'round',wind:'Westerly',phaseIdx:0,
+    ships:[],nextSpawn:1.0,tick:null,last:0,running:false,paused:false
+  };
+  show('s-war');
+  buildBattlefield();
+  renderWar();
+  document.getElementById('btn-round').onclick=function(){ws.shot='round';renderWar();logBattle('Round shot loaded.')};
+  document.getElementById('btn-repair').onclick=repairHull;
+  document.getElementById('btn-pause').onclick=togglePause;
+  var field=document.getElementById('battlefield');
+  field.onmousemove=function(e){
+    if(!ws.running||ws.paused)return;
+    var r=field.getBoundingClientRect();
+    var c=document.getElementById('crosshair');
+    c.style.display='flex';c.style.left=(e.clientX-r.left)+'px';c.style.top=(e.clientY-r.top)+'px';
+  };
+  field.onmouseleave=function(){document.getElementById('crosshair').style.display='none'};
+  field.onclick=function(e){
+    if(!ws.running||ws.paused)return;
+    fireAtPoint(e);
+  };
+  // Show the start overlay (reset it each time)
+  var overlay=document.getElementById('battle-overlay');
+  overlay.style.display='flex';
+  document.getElementById('btn-begin-battle').onclick=function(){
+    overlay.style.display='none';
+    ws.running=true;
+    ws.last=performance.now();
+    ws.tick=requestAnimationFrame(warLoop);
+    logBattle('Dover Roads, 19 May 1652: Blake fires a shotted gun at the Dutch flag. Tromp opens fire. England declares war on 8 July. The First Anglo-Dutch War begins.');
+  };
+}
+
+function togglePause(){
+  if(!ws.running)return;
+  ws.paused=!ws.paused;
+  var btn=document.getElementById('btn-pause');
+  if(ws.paused){
+    btn.querySelector('.an').textContent='\u25ba Resume';
+    btn.querySelector('.ac').textContent='The battle is paused. Press to continue.';
+    logBattle('— Battle paused —');
+  } else {
+    btn.querySelector('.an').textContent='\u2590\u2590 Pause';
+    btn.querySelector('.ac').textContent='Pause or resume the battle.';
+    ws.last=performance.now();
+    requestAnimationFrame(warLoop);
+    logBattle('Battle resumed.');
+  }
+}
+
+function buildBattlefield(){
+  var field = document.getElementById('battlefield');
+  var toRemove = field.querySelectorAll('.sea-dyn, .sky-dyn');
+  toRemove.forEach(function(el){el.remove()});
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('style','position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0');
+  svg.setAttribute('viewBox','0 0 760 380');
+  svg.setAttribute('preserveAspectRatio','xMidYMid slice');
+  svg.classList.add('sea-dyn');
+  
+  // 5 Shades of Blue (Light to Dark)
+  const shades = ['#b0c4de', '#708090', '#4682b4', '#1e90ff', '#1a2a5a'];
+  // 5 Line Weights
+  const weights = [0.4, 0.8, 1.2, 1.8, 2.5];
+  
+  let wavesHtml = `
+    <defs>
+      <linearGradient id="oceanWash" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${shades[0]}" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="${shades[4]}" stop-opacity="0.15"/>
+      </linearGradient>
+    </defs>
+    <rect width="760" height="380" fill="var(--paper2)"/>
+    <rect y="95" width="760" height="285" fill="url(#oceanWash)"/>
+  `;
+
+  // Generate 45 wavy lines
+  for (let i = 0; i < 45; i++) {
+    let yPos = 100 + (i * 6.2); // Start just below horizon and distribute
+    let shade = shades[i % 5];
+    let weight = weights[Math.floor(Math.random() * 5)];
+    let drift = Math.floor(Math.random() * 120);
+    // Randomize curve intensity slightly for a hand-drawn look
+    let curve = 8 + Math.random() * 10;
+    let opacity = (0.05 + Math.random() * 0.15).toFixed(2);
+
+    wavesHtml += `
+      <path d="M-${drift},${yPos} Q${40-drift},${yPos-curve} ${80-drift},${yPos} T${160-drift},${yPos} T${240-drift},${yPos} T${320-drift},${yPos} T${400-drift},${yPos} T${480-drift},${yPos} T${560-drift},${yPos} T${640-drift},${yPos} T${720-drift},${yPos} T${800-drift},${yPos} T${880-drift},${yPos}" 
+            fill="none" 
+            stroke="${shade}" 
+            stroke-width="${weight}" 
+            opacity="${opacity}" />
+    `;
+  }
+
+  // Dashed Horizon Line
+  wavesHtml += `<line x1="0" y1="95" x2="760" y2="95" stroke="#8b6035" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4"/>`;
+  
+  svg.innerHTML = wavesHtml;
+  field.insertBefore(svg, field.firstChild);
+}
+
+function warLoop(now){
+  if(!ws.running||ws.paused)return;
+  var dt=Math.min(0.05,(now-ws.last)/1000);
+  ws.last=now;
+  ws.timeLeft-=dt;
+  ws.reload=Math.max(0,ws.reload-dt*1000);
+  ws.nextSpawn-=dt;
+  updatePhase();
+  if(ws.nextSpawn<=0)spawnDutchShip();
+  for(var i=ws.ships.length-1;i>=0;i--){
+    var s=ws.ships[i];
+    if(!s||s.sunk){ws.ships.splice(i,1);continue;}
+    s.x+=s.vx*dt;
+    s.y+=Math.sin(now/600+s.wave)*0.018;
+    // Enemy fire
+    if(s.type==='war'&&Math.random()<dt*0.4){
+      ws.hull=Math.max(0,ws.hull-randInt(3,10));
+      logBattle(s.name+' returns fire. Dutch roundshot tears through English timbers.');
+    }
+    // Fireship collision
+    if(s.type==='fireship'&&s.x<12){
+      ws.hull=Math.max(0,ws.hull-randInt(22,34));
+      removeShip(i);
+      logBattle('A Dutch fireship makes contact with the English line!');
+      continue;
+    }
+    // Escaped
+    if(s.x<-12){
+      if(s.type==='merchant'){ws.escaped++;ws.morale=Math.max(0,ws.morale-1);logBattle('A Dutch merchantman breaks the blockade. The Channel is not secured.');}
+      removeShip(i);continue;
+    }
+    placeShip(s);
+  }
+  renderWar();
+  if(ws.hull<=0)endShooter('defeat');
+  else if(ws.escaped>=4)endShooter('defeat');
+  else if(ws.sunk>=ws.required)endShooter(determineVictory());
+  else if(ws.timeLeft<=0)endShooter(ws.sunk>=8&&ws.hull>20?determineVictory():'defeat');
+  else requestAnimationFrame(warLoop);
+}
+
+var PHASES=[
+  {at:90,name:'Blake fires on the Dutch flag'},
+  {at:68,name:'Tromp presses the Channel'},
+  {at:45,name:'Three days of running battle'},
+  {at:25,name:'Line ahead, heavy guns'},
+  {at:10,name:'Scheveningen: Tromp\'s last battle, 31 July 1653'}
+];
+
+function updatePhase(){
+  var idx=0;
+  for(var i=0;i<PHASES.length;i++)if(ws.timeLeft<=PHASES[i].at)idx=i;
+  if(idx!==ws.phaseIdx){
+    ws.phaseIdx=idx;
+    logBattle(PHASES[idx].name+'.');
+    if(idx===3)logBattle('The Gabbard, 2\u20133 June 1653 \u2014 Generals-at-Sea Monck and Deane engage. Deane is killed on his quarterdeck. Monck holds the line.');
+  }
+  document.getElementById('sh-phase').textContent=PHASES[idx].name;
+  ws.wind=ws.timeLeft<28?'Squally north-east':ws.timeLeft<58?'North-easterly':'Westerly';
+  document.getElementById('wind-banner').textContent='Wind: '+ws.wind;
+  document.getElementById('sh-wind-top').textContent=ws.wind;
+}
+
+function spawnDutchShip(){
+  var field=document.getElementById('battlefield');
+  var roll=Math.random();
+  var type=roll<0.35?'merchant':roll<0.78?'war':'fireship';
+  var names={
+    merchant:['Baltic Grain Hoy','Amsterdam Fluyt','Texel Coaster','Herring Buss','Eastland Trader','Hoorn Fluyt'],
+    war:['Brederode','Vrede','Eendracht','Vrijheid','Zon','De Zeven Provincien','Hollandia','Aemilia'],
+    fireship:['Drifting Fireship','Pitch Hulk','Hell-Burner','Burning Galliot']
+  };
+  var hp=type==='merchant'?1:type==='fireship'?1:1;
+  var spd=type==='merchant'?randInt(40,58):type==='fireship'?randInt(54,72):randInt(30,46);
+  if(ws.wind==='Squally north-east')spd+=16;
+  else if(ws.wind==='North-easterly')spd+=9;
+  var yLow=18,yHigh=82;
+  var sid='ship-'+Date.now()+'-'+randInt(0,9999);
+  var s={id:sid,type:type,name:names[type][randInt(0,names[type].length-1)],
+    x:114,y:randInt(yLow,yHigh),vx:-spd,hp:hp,wave:Math.random()*10,crippled:false};
+  // Hit zone pixel sizes per ship type
+  var hz=type==='war'?{w:130,h:100}:type==='fireship'?{w:80,h:80}:{w:60,h:55};
+  var el=document.createElement('div');
+  el.id=sid;
+  el.className='ship-group'+(type==='fireship'?' fireship-anim':'');
+  el.style.position='absolute';
+  el.style.cursor='crosshair';
+  // Transparent clickable overlay, same footprint as the ship SVG, centered on anchor
+  var hitZoneHtml='<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'
+    +'width:'+hz.w+'px;height:'+hz.h+'px;z-index:10;cursor:crosshair;pointer-events:all;" '
+    +'data-sid="'+sid+'"></div>';
+  el.innerHTML=shipSVG(type)+hitZoneHtml+
+    '<div class="ship-label" style="pointer-events:none">'+s.name+'</div>';
+  field.appendChild(el);
+  ws.ships.push(s);
+  ws.nextSpawn=Math.max(0.6,1.8-ws.phaseIdx*0.18+Math.random()*0.8);
+  // Wire direct click on the hit zone — bypasses pointer-events:none SVG entirely
+  el.querySelector('[data-sid]').addEventListener('click',function(ev){
+    ev.stopPropagation();
+    if(!ws.running||ws.paused)return;
+    var ship=ws.ships.find(function(z){return z.id===this.getAttribute('data-sid');}.bind(this));
+    if(ship&&!ship.sunk)hitShip(ship);
+  });
+  placeShip(s);
+}
+
+function shipSVG(type) {
+  const ink = "var(--ink)";
+  const red = "var(--red)";
+  const paper2 = "var(--paper2)";
+  const dutchOrange = "#e07020";
+  const dutchBlue = "#2040a0";
+
+  // THE WARSHIP: Detailed Man-o'-War
+  if (type === 'war') {
+    return `<svg width="120" height="90" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;display:block">
+      <defs>
+        <pattern id="sailHatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="0" y2="5" stroke="${paper2}" stroke-width="1.2" opacity="0.6"/>
+        </pattern>
+      </defs>
+      <g stroke="${ink}" stroke-width="0.5" opacity="0.4">
+        <line x1="40" y1="110" x2="70" y2="20" /><line x1="160" y1="110" x2="110" y2="15" />
+        <line x1="70" y1="60" x2="110" y2="50" /><line x1="70" y1="30" x2="110" y2="25" />
+      </g>
+      <path d="M30,100 L170,100 Q185,100 180,125 Q175,135 100,135 Q25,135 20,120 Z" fill="${ink}"/>
+      <g fill="${paper2}" opacity="0.5">
+        <rect x="50" y="106" width="5" height="4" /><rect x="70" y="106" width="5" height="4" />
+        <rect x="90" y="106" width="5" height="4" /><rect x="110" y="106" width="5" height="4" />
+        <rect x="60" y="115" width="5" height="4" /><rect x="85" y="115" width="5" height="4" />
+        <rect x="115" y="115" width="5" height="4" />
+      </g>
+      <line x1="70" y1="20" x2="70" y2="105" stroke="${ink}" stroke-width="3" />
+      <line x1="110" y1="15" x2="110" y2="105" stroke="${ink}" stroke-width="3.5" />
+      <g fill="url(#sailHatch)" stroke="${ink}" stroke-width="1.2">
+        <path d="M70,25 Q100,45 70,65 Q85,45 70,25" /> 
+        <path d="M70,70 Q95,85 70,100 Q80,85 70,70" />
+        <path d="M110,20 Q150,45 110,60 Q130,45 110,20" />
+        <path d="M110,65 Q160,85 110,105 Q135,85 110,65" />
+      </g>
+      <g transform="translate(110, 5)">
+        <rect width="24" height="4" fill="${dutchOrange}" /><rect y="4" width="24" height="4" fill="white" /><rect y="8" width="24" height="4" fill="${dutchBlue}" />
+        <line x1="0" y1="0" x2="0" y2="15" stroke="${ink}" stroke-width="1.5" />
+        <rect width="24" height="12" fill="none" stroke="${ink}" stroke-width="0.8" />
+      </g>
+    </svg>`;
+  }
+  
+  // THE MERCHANT: "The Fluyt" - Round, bulging hull, one massive sail
+  if (type === 'merchant') {
+    return `<svg width="55" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;display:block">
+      <defs>
+        <pattern id="tanHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+          <rect width="4" height="4" fill="#d2b48c" />
+          <line x1="0" y1="0" x2="4" y2="4" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <path d="M20,70 L80,70 L85,60 L90,60 L80,85 L25,85 Z" fill="${ink}"/>
+      <line x1="40" y1="30" x2="40" y2="75" stroke="${ink}" stroke-width="2" />
+      <line x1="70" y1="25" x2="70" y2="75" stroke="${ink}" stroke-width="2" />
+      <g fill="url(#tanHatch)" stroke="${ink}" stroke-width="1">
+        <path d="M40,35 Q55,50 40,65 Q50,50 40,35" />
+        <path d="M70,30 Q95,45 70,62 Q85,45 70,30" />
+      </g>
+      <g transform="translate(70, 15)">
+        <rect width="18" height="4" fill="${dutchOrange}" />
+        <rect y="4" width="18" height="4" fill="white" />
+        <rect y="8" width="18" height="4" fill="${dutchBlue}" />
+        <line x1="0" y1="0" x2="0" y2="15" stroke="${ink}" stroke-width="1.5" />
+      </g>
+    </svg>`;
+  }
+
+  // THE FIRESHIP: A "Hell-burner" - No sails, jagged flames, heavy smoke
+  if (type === 'fireship') {
+    return `<svg width="75" height="75" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;display:block">
+      <path d="M20,75 L80,75 L85,65 L90,65 L82,88 L25,88 Z" fill="${ink}"/>
+      <line x1="55" y1="40" x2="55" y2="75" stroke="${ink}" stroke-width="3" />
+      <g class="fire-jitter-anim">
+        <path d="M25,75 L28,45 L35,68 L40,35 L48,65 L55,25 L62,60 L70,30 L78,65 L82,75" fill="none" stroke="#8b0000" stroke-width="4" stroke-linecap="round" />
+        <path d="M30,75 L35,55 L42,72 L50,45 L58,70 L65,52 L75,75" fill="none" stroke="#ff4500" stroke-width="3" stroke-linecap="round" />
+        <path d="M40,75 L45,60 L50,75 L55,58 L60,75" fill="none" stroke="#ffae42" stroke-width="1.5" />
+      </g>
+      <g transform="translate(55, 20)">
+         <rect width="20" height="4" fill="${dutchOrange}" />
+         <rect y="4" width="20" height="4" fill="white" />
+         <rect y="8" width="20" height="4" fill="${dutchBlue}" />
+         <line x1="0" y1="0" x2="0" y2="20" stroke="${ink}" stroke-width="1.8" />
+      </g>
+    </svg>`;
+  }
+}
+
+function placeShip(s){
+  var el=document.getElementById(s.id);if(!el)return;
+  var field=document.getElementById('battlefield');
+  var fw=field.offsetWidth||760;
+  var fh=field.offsetHeight||380;
+  var px=(s.x/100)*fw;
+  var py=(s.y/100)*fh;
+  el.style.left=px+'px';
+  el.style.top=py+'px';
+  el.classList.toggle('crippled',s.crippled);
+}
+
+function fireAtPoint(e){
+  if(!ws.running||ws.paused)return;
+  var field=document.getElementById('battlefield');
+  var r=field.getBoundingClientRect();
+  var cx=(e.clientX-r.left)/r.width*100;
+  var cy=(e.clientY-r.top)/r.height*100;
+  // Check if click is near any ship
+  var fw=r.width,fh=r.height;
+  var hit=null,bestDist=Infinity;
+  for(var i=0;i<ws.ships.length;i++){
+    var s=ws.ships[i];
+    if(!s||s.sunk)continue;
+    // Convert ship % coords to pixels for distance check
+    var sx=s.x/100*fw,sy=s.y/100*fh;
+    var mx=e.clientX-r.left,my=e.clientY-r.top;
+    // Use generous hit radius scaled to ship type
+    var hitRadius=s.type==='war'?60:s.type==='fireship'?45:38;
+    var dist=Math.sqrt((mx-sx)*(mx-sx)+(my-sy)*(my-sy));
+    if(dist<hitRadius&&dist<bestDist){bestDist=dist;hit=s;}
+  }
+  if(hit){hitShip(hit);}
+  else{fireShot(cx,cy);}
+}
+
+function fireAtShipId(id){
+  var s=ws.ships.find(function(z){return z.id===id});
+  if(!s||s.sunk)return;
+  hitShip(s);
+}
+
+function hitShip(s){
+  if(!ws.running||ws.paused)return;
+  var now=performance.now();
+  if(ws._lastFire&&now-ws._lastFire<150)return;
+  ws._lastFire=now;
+  if(ws.reload>0)return logBattle('Gun crews still reloading. Wait for the ready signal.');
+  if(ws.powder<=0)return logBattle('The powder magazine is empty. Not another shot can be fired.');
+  ws.powder--;
+  ws.reload=ws.reloadMax;
+  showBurst(s.x,s.y,true);
+  addSmoke(s.x,s.y);
+  s.hp--;
+  if(s.hp>0)logBattle('Round shot strikes '+s.name+'. She\'s damaged — '+s.hp+' hit'+(s.hp===1?'':'s')+' remaining.');
+  if(s.hp<=0&&!s.sunk)sinkShip(s);
+}
+
+function fireShot(x,y){
+  if(!ws.running||ws.paused)return;
+  var now=performance.now();
+  if(ws._lastFire&&now-ws._lastFire<150)return;
+  ws._lastFire=now;
+  if(ws.reload>0)return logBattle('Gun crews still reloading. Wait for the ready signal.');
+  if(ws.powder<=0)return logBattle('The powder magazine is empty. Not another shot can be fired.');
+  ws.powder--;
+  ws.reload=ws.reloadMax;
+  showBurst(x,y,false);
+  logBattle('The broadside falls short. A costly miss.');
+}
+function sinkShip(s){
+  if(s.sunk)return;
+  s.sunk=true;
+  ws.sunk++;ws.score+=s.type==='war'?3:1;
+  if(s.type==='war')ws.morale=Math.min(20,ws.morale+1);
+  logBattle(s.name+' struck below the waterline. She\'s going down! ('+ws.sunk+'/'+ws.required+' sunk)');
+  var el=document.getElementById(s.id);if(el)el.remove();
+  var idx=ws.ships.findIndex(function(z){return z.id===s.id});
+  if(idx>=0)ws.ships.splice(idx,1);
+}
+
+function removeShip(i){
+  var s=ws.ships[i];if(!s)return;
+  var el=document.getElementById(s.id);if(el)el.remove();ws.ships.splice(i,1);
+}
+
+function repairHull(){
+  if(ws.powder<2)return logBattle('Insufficient powder stores to spare for repairs under fire.');
+  ws.powder-=2;
+  ws.hull=Math.min(ws.hullMax,ws.hull+14+Math.floor(stats.stability/2));
+  ws.reload=Math.max(ws.reload,800);
+  logBattle('Carpenters and mates plug shot-holes with oakum and lead. The hull is shored up.');
+}
+
+function moraleBoost(){
+  if(ws.powder<1)return logBattle('No powder to spare for the signal.');
+  ws.powder--;
+  ws.morale=Math.min(20,ws.morale+3);
+  logBattle('Drums beat to quarters. The English colors are hoisted again. The men cheer.');
+}
+
+function showBurst(x,y,hit){
+  var field=document.getElementById('battlefield');
+  var b=document.createElement('div');
+  b.className=hit?'hitburst':'splash';
+  var fw=field.offsetWidth||760,fh=field.offsetHeight||380;
+  b.style.left=(x/100*fw)+'px';b.style.top=(y/100*fh)+'px';
+  field.appendChild(b);
+  setTimeout(function(){if(b.parentNode)b.remove()},550);
+}
+
+function addSmoke(x,y){
+  var field=document.getElementById('battlefield');
+  var sm=document.createElement('div');
+  sm.className='smokepuff';
+  var fw=field.offsetWidth||760,fh=field.offsetHeight||380;
+  sm.style.left=(x/100*fw)+'px';sm.style.top=((y-5)/100*fh)+'px';
+  field.appendChild(sm);
+  setTimeout(function(){if(sm.parentNode)sm.remove()},900);
+}
+
+function logBattle(txt){document.getElementById('war-log').textContent=txt;}
+
+function renderWar(){
+  if(!ws.hullMax)return;
+  document.getElementById('sh-hull').textContent=Math.max(0,Math.round(ws.hull));
+  document.getElementById('sh-hull-bar').style.width=Math.max(0,Math.round(ws.hull/ws.hullMax*100))+'%';
+  document.getElementById('sh-convoy').textContent=ws.sunk+'/'+ws.required+' ('+ws.escaped+' escaped)';
+  document.getElementById('sh-convoy-bar').style.width=Math.min(100,Math.round(ws.sunk/ws.required*100))+'%';
+  document.getElementById('sh-powder').textContent=ws.powder;
+  document.getElementById('sh-powder-bar').style.width=Math.max(0,Math.round(ws.powder/ws.powderMax*100))+'%';
+  document.getElementById('sh-timer').textContent=Math.max(0,Math.ceil(ws.timeLeft))+'s';
+  document.getElementById('reload-ring').textContent=ws.reload<=0?'Ready: Round':'Reloading\u2026';
+}
+
+function endShooter(type){
+  ws.running=false;
+  if(ws.tick)cancelAnimationFrame(ws.tick);
+  ws.ships.forEach(function(s){var el=document.getElementById(s.id);if(el)el.remove()});
+  ws.ships=[];
+  if(type!=='defeat'){
+    if(ws.sunk>=12)stats.military=clamp(stats.military+2);
+    if(ws.escaped<=1)stats.wealth=clamp(stats.wealth+1);
+  }
+  showOutcome(type);
+}
+
+function determineVictory(){
+  if(stats.wealth>=14&&stats.military>=14)return 'victory-total';
+  if(stats.military>=14)return 'victory-military';
+  if(stats.wealth>=14)return 'victory-economic';
+  if(stats.support>=14&&stats.stability>=10)return 'victory-republic';
+  return 'victory';
+}
+
+function showOutcome(type){
+  show('s-outcome');renderStats('out-stats');
+  var n=playerName;
+  var OUTCOMES={
+    'victory-total':{tag:'Total Victory',tagClass:'tag-victory',
+      title:'England Triumphant',
+      desc:n+'\'s counsel held the republic together through every crisis. The army kept faith, the poor were not abandoned, the fleet was led by men of merit, and the Navigation Act gave England the instrument of its future greatness. The Dutch fleet is broken. A century of commercial dominance stretches ahead.',
+      epi:'"They rig a Navy while we dress us late / And ere we Dine, raise and rebuild their State." — Andrew Marvell (1654)'},
+    'victory-military':{tag:'Victory at Sea',tagClass:'tag-victory',
+      title:'The Commonwealth Prevails',
+      desc:'The Dutch fleet is shattered, '+n+'. Your counsel built a navy of merit-promoted commanders and well-paid crews, and the fleet proved the difference. Blake held the early line. Monck and Deane won the Gabbard. Tromp fell at Scheveningen. England commands the Narrow Seas, though the treasury runs thin and the Diggers\' question has not been answered. The republic survives.',
+      epi:'"England\'s rights, or reparation for her wrongs, were demanded by her fleets throughout the world." — Historical record'},
+    'victory-economic':{tag:'The Merchant Republic',tagClass:'tag-victory',
+      title:'Trade Prevails Over the Sword',
+      desc:n+'\'s commercial counsel outlasted Dutch naval resolve. The republic endures through the power of the counting house and the English carrying trade.',
+      epi:'"The places where trade has most flourished are all Commonwealths." — William Temple (1673)'},
+    'victory-republic':{tag:'The Free Commonwealth',tagClass:'tag-victory',
+      title:'A Free People, A Lasting Republic',
+      desc:'The people stood behind the republic, '+n+', because you gave them reason to. You kept faith with the army, did not abandon the poor, and granted the liberty of conscience men died for. Popular support and political stability carried England through the war.',
+      epi:'"Could it happen that you forgot the Dutch? Their republic, after wars that were lengthy but successfully waged, obtained its liberty." — John Milton (1651)'},
+    'victory':{tag:'Victory',tagClass:'tag-victory',
+      title:'The Commonwealth Survives',
+      desc:'The Dutch fleet is broken, '+n+'. What comes next depends upon whether Parliament has the wisdom to honour what it has promised.',
+      epi:'"The old world was running up like parchment in the fire, and wearing away." — Gerrard Winstanley (1649)'},
+    'defeat':{tag:'Defeat',tagClass:'tag-defeat',
+      title:'The Commonwealth Falters',
+      desc:'The Dutch smashed the English fleet, '+n+'. Trade collapses. The army turns against the Rump. Cromwell dissolves the Commonwealth at musket-point and declares himself Lord Protector. The republic is finished by its own failures.',
+      epi:'"Where is this goodly tower of a Commonwealth which the English boasted they would build?" — John Milton, 1660'}
+  };
+  var o=OUTCOMES[type]||OUTCOMES['defeat'];
+  document.getElementById('out-tag').textContent=o.tag;
+  document.getElementById('out-tag').className='outcome-tag '+o.tagClass;
+  document.getElementById('out-title').textContent=o.title;
+  document.getElementById('out-desc').textContent=o.desc;
+  document.getElementById('out-epilogue').textContent=o.epi||'';
+  // Show retry battle button only on defeat
+  var retryBattleBtn=document.getElementById('btn-retry-battle');
+  if(type==='defeat'){
+    retryBattleBtn.style.display='inline-block';
+  } else {
+    retryBattleBtn.style.display='none';
+  }
+}
+
+function retryBattle(){
+  // Reset battle state and go back to war briefing (stats preserved)
+  ws={};
+  showWarBriefing();
+}
+
+function retryFromPolicies(){
+  // Reset policy state but keep player name
+  stats={stability:10,wealth:10,military:10,support:10};
+  evIdx=0;ws={};
+  showEvent();
+}
+
+function restartGame(){
+  stats={stability:10,wealth:10,military:10,support:10};
+  evIdx=0;playerName='Advisor';ws={};
+  document.getElementById('name-input').value='';
+  show('s-intro1');
+  document.querySelectorAll('.pdot').forEach(function(d,i){d.classList.toggle('active',i===0)});
+}
+
+// ============================================================
+// WIRING
+// ============================================================
+var btnToName=document.getElementById('btn-to-name');if(btnToName){btnToName.addEventListener('click',startGame);}
+document.getElementById('btn-name-confirm').addEventListener('click',function(){
+  var val=document.getElementById('name-input').value.trim();
+  if(!val){document.getElementById('name-error').style.display='block';document.getElementById('name-input').focus();return;}
+  document.getElementById('name-error').style.display='none';playerName=val;showEvent();
+});
+document.getElementById('name-input').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('btn-name-confirm').click()});
+document.getElementById('btn-start-battle').addEventListener('click',beginWar);
+document.getElementById('btn-restart').addEventListener('click',restartGame);
+document.getElementById('btn-fail-restart').addEventListener('click',restartGame);
+</script>
+
+<!-- Atlantic Web merged logic -->
+<script>
+(function(){
+
+// ============================================================
+// STATE
+// ============================================================
+var playerName = 'Analyst';
+// Stats grounded in Scott's argument:
+// Fiscal   , England's fiscal-military state: debt, banking, naval power
+// Commerce , Atlantic trade, Navigation Acts, the empire of customers
+// Republic , The Commonwealth tradition: Sidney, Locke, consent theory, natural rights
+// Consent  , Constitutional principle: representative gov't vs parliamentary sovereignty
+var stats = {fiscal:10,commerce:10,republic:10,consent:10};
+var STAT_COLORS = {fiscal:'#6b4020',commerce:'#8a7020',republic:'#1a2a5a',consent:'#8b1a1a'};
+var STAT_LABELS = {fiscal:'Fiscal-Military Power',commerce:'Trade Health',republic:'Spread of Theory',consent:'Colonial Stability'};
+
+// Sequential unlock, which node is currently active
+var currentActiveIdx = 0; // index into NODE_ORDER
+var NODE_ORDER = ['amsterdam','london','edinburgh','bristol','barbados','virginia'];
+// Amsterdam starts NOT completed, it's now the first active node
+var nodesCompleted = {};
+var drawnLines = []; // [{from,to}] pairs that have been drawn
+var currentNodeId = null;
+var totalConnections = 0;
+
+function clamp(v,mn,mx){return Math.max(mn||0,Math.min(mx||20,v));}
+
+// ============================================================
+// MAP DATA
+// ============================================================
+var NODES = [
+  {
+    id:'amsterdam',
+    name:'Rotterdam',
+    label:'Rotterdam',
+    lon:4.5, lat:51.95,
+    era:'1649–1689',
+    description:'The twin hubs of the Dutch commercial republic. Amsterdam: centre of the spice trade, the greatest printing industry in Europe, home of Spinoza and the Remonstrant exile community. Rotterdam: refuge for the Commonwealth\'s exiled republicans, Locke fled here after Sidney\'s arrest in 1683, writing the Two Treatises with Benjamin Furly and forming associations with Pierre Bayle, Jean Le Clerc and Philip van Limborch.',
+    commodities:['Spices','Finance','Print','Philosophy','Exile'],
+    connections:['london'],
+    event: 'rotterdam_event'
+  },
+  {
+    id:'london',
+    name:'London',
+    label:'London',
+    lon:-0.12, lat:51.5,
+    era:'1689–1730',
+    description:'By 1700 London was becoming, in Defoe\'s phrase, "the center of world commerce." The Bank of England (1694), the Royal Society, and 150 joint-stock companies transformed it.',
+    commodities:['Banking','Navigation','Wool','Coffee'],
+    connections:['amsterdam','edinburgh','bristol'],
+    event: 'london_event'
+  },
+
+  {
+    id:'edinburgh',
+    name:'Edinburgh',
+    label:'Edinburgh',
+    lon:-3.19, lat:55.95,
+    era:'1707',
+    description:'The Treaty of Union (1707) created the United Kingdom of Great Britain. David Hume, Adam Smith, and the Scottish Enlightenment would transform Britain\'s intellectual life.',
+    commodities:['Linen','Cattle','Law','Philosophy'],
+    connections:['london'],
+    event: 'edinburgh_event'
+  },
+  {
+    id:'bristol',
+    name:'Bristol',
+    label:'Bristol',
+    lon:-2.59, lat:51.45,
+    era:'1680–1750',
+    description:'Bristol was the second port of Atlantic Britain, the gateway to the West Indies trade, the slave trade, and the tobacco routes. Its merchants grew wealthy on horror.',
+    commodities:['Sugar','Tobacco','Slaves','Ships'],
+    connections:['london','barbados'],
+    event: 'bristol_event'
+  },
+  {
+    id:'barbados',
+    name:'Barbados',
+    label:'Barbados',
+    lon:-59.55, lat:13.1,
+    era:'1650–1760',
+    description:'The Caribbean was the most profitable part of Britain\'s empire, and the most brutal. Sugar plantations built on enslaved labour drove the Atlantic economy.',
+    commodities:['Sugar','Rum','Slaves','Cotton'],
+    connections:['bristol','virginia'],
+    event: 'barbados_event'
+  },
+  {
+    id:'virginia',
+    name:'Virginia',
+    label:'Virginia',
+    lon:-76.6, lat:37.4,
+    era:'1650–1765',
+    description:'Virginia\'s tobacco economy and its House of Burgesses shaped the culture of colonial self-government.',
+    commodities:['Tobacco','Cotton','Slaves','Liberty'],
+    connections:['barbados','london']
+  }
+];
+
+// ============================================================
+// EVENTS
+// ============================================================
+var NODE_EVENTS = {
+ rotterdam_event: {
+   year:'1689',
+   title:'The Two Treatises Cross the Atlantic',
+   contextTitle:'The Philosophical Handoff',
+   contextText:'When Algernon Sidney was arrested in 1683 in possession of a manuscript arguing that resistance to tyranny was an imperative of justice, John Locke fled England for Rotterdam. There he formed associations with other early Enlightenment luminaries. After the Glorious Revolution, Locke returned to England and published the Two Treatises of Government in 1689.',
+   histQuote:'The Commonwealth tradition, augmented by Neville, Sidney, Locke, and Cato\'s Letters, intertwined classical republicanism and natural-law theory. Partly from this synthesis emerged the American claim that all men are created equal.',
+   histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+   promptFn:function(n){return 'Locke\'s Two Treatises are published, '+n+'. The argument, that governments hold power on trust, derive their authority from consent, and forfeit power when they break the people’s trust, is spreading. Do you recommend their wide circulation, or caution against it?';},
+   correctIdx:0,
+   choices:[
+     {label:'Circulate widely!',desc:'The Treatises defend what the English revolution achieved.',effects:{fiscal:0,commerce:0,republic:3,consent:2},
+      consequenceFn:function(n){return 'The Two Treatises travel, '+n+', following the tobacco and sugar routes westward, appearing in the libraries of Virginia planters and Massachusetts ministers. When Jefferson drafts the Declaration of Independence in 1776, he will draw on them directly.'}},
+     {label:'Restrict circulation!',desc:'The right to resist tyranny can justify any rebellion. Let it work quietly among men of substance.',effects:{fiscal:0,commerce:0,republic:-2,consent:-2},
+      consequenceFn:function(n){return 'The Two Treatises circulate in limited manuscript copies among men of property and learning, '+n+', as you advised, but ideas of this force cannot be contained. The Quaker correspondence networks that run from Rotterdam to Philadelphia carry them anyway.'}}
+   ],
+ },
+ london_event: {
+   year:'1694',
+   title:'The Bank of England',
+   contextTitle:'The Anglo-Dutch Financial Revolution',
+   contextText:'The Glorious Revolution of 1688 brought William III of Orange to the English throne. The Act for the Additional Aid (1665) had prefigured a parliamentary guarantee of public debt. This parliamentary guarantee was backed by the collective credit of the legislature, making low-interest borrowing possible, and allowing England to fund wars that no amount of immediate taxation could have sustained. In 1694 Parliament must decide whether to establish a Bank of England lending £1.2 million to the government at 8 per cent interest',
+   histQuote:'In 1689 there were fifteen joint-stock companies . . . with a total value of 0.9 million pounds. By 1695 there were 150, with a value of 4.3 million pounds. This fiscal infrastructure grew in a symbiotic relationship with the power of the state.',
+   histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+   promptFn:function(n){return 'Parliament is debating the Bank of England proposal, '+n+'. This bank will reshape English power. Do you champion it?';},
+   correctIdx:0,
+   choices:[
+     {label:'Champion the Bank!',desc:'England must have the fiscal instrument its empire requires.',effects:{fiscal:3,commerce:2,republic:-1,consent:1},
+      consequenceFn:function(n){return 'The Bank of England is founded in 1694, '+n+', lending £1.2 million to the government at 8 per cent interest. Within a year there are 150 joint-stock companies where fifteen existed before, with a total value of £4.3 million.'}},
+     {label:'Oppose it! England should not be enslaved to Dutch financiers.',desc:'Property in land is the foundation of English liberty. The Bank gives Parliament\'s creditors a grip on the state.',effects:{fiscal:-2,commerce:-1,republic:2,consent:1},
+      consequenceFn:function(n){return 'You stand with the Tory opposition, '+n+', and your arguments about the danger of financial oligarchy find an audience among the landed gentry. However, the war with France makes the Bank a fiscal necessity, and it is founded anyway. By 1695 there are 150 joint-stock companies. By 1730 Britain has displaced the Dutch as the leading commercial power in the Atlantic world.'}}
+   ],
+ },
+ edinburgh_event: {
+   year:'1707',
+   title:'The Treaty of Union',
+   contextTitle:'The Biggest Free Trade Area in Europe',
+   contextText:'In 1707, the search for military security produced the United Kingdom of Great Britain, an incorporating union insisted upon by English negotiators against the federal arrangement preferred by the Scots, who wished to preserve their legislative sovereignty.',
+   histQuote:'The Treaty of Union brought into being the biggest free trade area in a Europe bristling with both international protectionism and the jealous defence of local economic privileges.',
+   histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+   promptFn:function(n){return 'The terms of union are before Parliament, '+n+'. England offers Scotland full commercial access to Britain\'s global empire in exchange for an incorporating union. The Scots  prefer a federal arrangement modelled on the Dutch republic. Do you support the incorporating union on English terms?';},
+   correctIdx:0,
+   choices:[
+     {label:'Support the incorporating union.',desc:'The Scots will find their interests served by full access to the empire\'s trade.',effects:{fiscal:2,commerce:2,republic:-1,consent:1},
+      consequenceFn:function(n){return 'The Treaty of Union passes on English terms, '+n+', and Scotland enters the imperial economy. The free trade area created by union creates the mass consumer market for British manufactures that will eventually make American colonial trade central to the British economy at the cost of Scottish legislative sovereignty. '}},
+     {label:'Argue for federal terms.',desc:'A federal arrangement, like the Dutch republic\'s, honors Scottish sovereignty and creates a partnership.',effects:{fiscal:-1,commerce:0,republic:2,consent:2},
+      consequenceFn:function(n){return 'You press the case for federal terms, '+n+', arguing from the Dutch republic\'s model. English negotiators refuse and an incorporating union passes anyway. The federal logic you defended will appear again in 1787, when American constitution-makers, drawing on both the Dutch and Scots examples, build the federal republic that England rejected in 1707.'}}
+   ],
+ },
+ bristol_event: {
+   year:'1750',
+   title:'An Empire of Customers',
+   contextTitle:'Trade, Slavery, and the Atlantic Triangle',
+   contextText:'Between 1660 and 1807 British merchants transported approximately three million enslaved Africans across the Atlantic. Bristol, Liverpool, and London grew wealthy on this trade.',
+   histQuote:'Exports to the West Indies included slaves, of whom British merchants became the largest carriers during the eighteenth century. Slaves were purchased in Africa with manufactured goods, including between 150,000 and 200,000 guns per year.',
+   histAttr:'— Jonathan Scott, How the Old World Ended (2019)',
+   promptFn:function(n){return 'A Quaker petition comes before Parliament, '+n+'. It argues the Atlantic slave trade is incompatible with the principles of Protestant liberty for which England claims to stand. Bristol\'s trading houses deny any contradiction. Will you add your voice to the petition?';},
+   quote:'The liberty of America is the Life of Britain, and if Slavery takes place in this Country, Britain will fall a sacrifice to her own tyranny.',
+   attr:'— Samuel Ward of Rhode Island, 1773, quoted in Scott (2019)',
+   correctIdx:0,
+   choices:[
+     {label:'Support the petition!',desc:'Liberty claimed for Englishmen and denied to Africans is not principled.',effects:{fiscal:0,commerce:-2,republic:3,consent:2},
+      consequenceFn:function(n){return 'The petition fails, '+n+', as everyone in the chamber knew it would. The trade is worth too much. The Quaker network takes note of who spoke. By the 1780s this network will have grown into the organised abolition movement.'}},
+     {label:'Abstain,',desc:'Premature challenge may discredit the cause for a generation.',effects:{fiscal:1,commerce:1,republic:-2,consent:-2},
+      consequenceFn:function(n){return 'You hold back, '+n+'. The petition fails without your voice. Nothing changes and your standing with the merchant interest is preserved. The trade continues for another half-century. When American colonists invoke the language of natural rights in 1776, they do so in a place where a third of Virginia\'s population is enslaved.'}}
+   ],
+ },
+ barbados_event: {
+   year:'1733',
+   title:'The Navigation Acts',
+   contextTitle:'An Empire of Captive Markets',
+   contextText:'The Navigation Acts of 1651, 1660, and 1689 regulated England\'s trade with its colonial possessions, obliging them to use English shipping and sell to English markets. Between 1700 and 1773, official exports from England to British America rose six-fold in value.',
+   histQuote:'A great empire has been established for the sole purpose of raising up a nation of customers who should be obliged to buy from the shops of our different producers.',
+   histAttr:'— Adam Smith, The Wealth of Nations (1776)',
+   promptFn:function(n){return 'The sugar planters of Barbados demand continued monopoly access to British markets, the protection that has made Caribbean sugar the most profitable commodity in the empire. Without it, they say, French competition will destroy them. The Navigation Acts also produce an empire built on captive markets, colonies that exist to buy from British manufacturers and sell to British merchants. Do you defend the Navigation Acts?';},
+   correctIdx:1,
+   choices:[
+     {label:'Defend the Navigation monopoly!',desc:'Remove one protection and the logic that holds the whole together unravels.',effects:{fiscal:1,commerce:2,republic:-2,consent:-2},
+      consequenceFn:function(n){return 'You defend the Navigation Acts, '+n+', and the sugar planters are satisfied. The same monopoly logic, that Parliament regulates colonial commerce in all cases, will be applied to the mainland colonies when the Seven Years War leaves Britain with debts of £140 million and a search for new revenue.'}},
+     {label:'Question the monopoly.',desc:'The Navigation Acts served their purpose against the Dutch, but system of captive markets stores up resentment.',effects:{fiscal:-1,commerce:1,republic:2,consent:2},
+      consequenceFn:function(n){return 'Your questioning finds a hearing among those who read economic history, '+n+', but the sugar interest is too powerful and the Navigation Acts are defended. The argument you make will be made again, by Adam Smith in 1776, in The Wealth of Nations. For now the system holds and the export figures keep rising.'}}
+   ],
+ },
+};
+
+
+function renderFinalMap() {
+  var svgEl = document.getElementById('atl-final-map');
+  if (!svgEl) return;
+  svgEl.innerHTML = '';
+
+  var proj = getProjection();
+  var svg = d3.select(svgEl);
+
+  svg.append('rect').attr('width',760).attr('height',440).attr('fill','#ddd0b0');
+
+  // All nodes are complete and all sequential lines are drawn on this screen
+  var allLines = [
+    {from:'amsterdam', to:'london'},
+    {from:'london',    to:'edinburgh'},
+    {from:'london',    to:'bristol'},
+    {from:'bristol',   to:'barbados'},
+    {from:'barbados',  to:'virginia'},
+    {from:'virginia',  to:'london'},
+    {from:'virginia',  to:'bristol'}
+  ];
+
+  loadWorldData(function(world) {
+    if (world && typeof topojson !== 'undefined') {
+      var landFeature = null;
+      try { landFeature = topojson.feature(world, world.objects.land); } catch(e) {}
+      if (!landFeature) {
+        try { landFeature = topojson.feature(world, world.objects.countries); } catch(e2) {}
+      }
+      if (landFeature) {
+        var features = landFeature.type === 'FeatureCollection' ? landFeature.features : [landFeature];
+        svg.selectAll('.land').data(features).enter().append('path')
+          .attr('class','land').attr('d', _path)
+          .attr('fill','#e8dcc4').attr('stroke','#1a0f05').attr('stroke-width','0.85').attr('stroke-linejoin','round');
+      }
+    }
+
+    // Graticule
+    var graticule = d3.geoGraticule().step([10,10]);
+    svg.append('path').datum(graticule()).attr('d', _path)
+      .attr('fill','none').attr('stroke','rgba(26,15,5,0.06)').attr('stroke-width','0.5');
+
+    // Ocean labels removed
+
+    // Connection lines, all drawn
+    allLines.forEach(function(pair){
+      var fromNode = NODES.find(function(n){return n.id===pair.from;});
+      var toNode   = NODES.find(function(n){return n.id===pair.to;});
+      if (!fromNode || !toNode) return;
+      var fxy = nodeXY(fromNode), txy = nodeXY(toNode);
+      svg.append('line')
+        .attr('x1',fxy.x).attr('y1',fxy.y).attr('x2',txy.x).attr('y2',txy.y)
+        .attr('stroke','rgba(26,15,5,0.12)').attr('stroke-width','4').attr('stroke-linecap','round');
+      svg.append('line')
+        .attr('x1',fxy.x).attr('y1',fxy.y).attr('x2',txy.x).attr('y2',txy.y)
+        .attr('stroke','#6b4020').attr('stroke-width','2').attr('opacity','0.85')
+        .attr('stroke-dasharray','6,3').attr('stroke-linecap','round');
+    });
+
+    // All nodes, completed style
+    NODES.forEach(function(node){
+      var xy = nodeXY(node);
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',10)
+        .attr('fill','#2d1a08').attr('stroke','#c8a96e').attr('stroke-width','2.5');
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',3.5).attr('fill','#c8a96e');
+
+      var labelOffsets = {
+        amsterdam:[18,-4], london:[0,20],
+        edinburgh:[0,-17], bristol:[-22,-15], barbados:[0,-17], virginia:[-22,-15]
+      };
+      var off = labelOffsets[node.id] || [0,-16];
+      var anchor = node.id === 'amsterdam' ? 'start' : 'middle';
+
+      if (node.id === 'amsterdam') {
+        svg.append('text')
+          .attr('x', xy.x + 18).attr('y', xy.y)
+          .attr('text-anchor','start').attr('font-family','Cinzel,serif').attr('font-size','9')
+          .attr('fill','#1a0f05').attr('font-weight','700')
+          .text('Rotterdam');
+      } else {
+        svg.append('text')
+          .attr('x', xy.x+off[0]).attr('y', xy.y+off[1])
+          .attr('text-anchor','middle').attr('font-family','Cinzel,serif').attr('font-size','9')
+          .attr('fill','#1a0f05').attr('font-weight','700')
+          .text(node.label);
+      }
+    });
+
+    // bottom label removed
+  });
+}
+
+function drawSceneTransition() {
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="hatchT" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="var(--ink)" stroke-width="0.8" opacity="0.35"/>
+      </pattern>
+      <pattern id="crossT" width="6" height="6" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="6" y2="6" stroke="var(--ink)" stroke-width="0.7" opacity="0.5"/>
+        <line x1="6" y1="0" x2="0" y2="6" stroke="var(--ink)" stroke-width="0.7" opacity="0.5"/>
+      </pattern>
+    </defs>
+    <path d="M0,112 Q190,100 380,110 Q570,120 760,108 L760,160 L0,160 Z" fill="url(#hatchT)" opacity="0.35"/>
+    <path d="M0,112 Q190,100 380,110 Q570,120 760,108" fill="none" stroke="var(--ink)" stroke-width="2"/>
+    <!-- Smoke clouds -->
+    ${[80,200,380,530,660].map(function(x,i){var r=[30,22,38,26,20][i];return '<ellipse cx="'+x+'" cy="'+(70+i%2*8)+'" rx="'+r+'" ry="'+(r*0.6)+'" fill="url(#hatchT)" stroke="var(--ink)" stroke-width="1" opacity="0.35"/>';}).join('')}
+    <!-- Ships after battle -->
+    ${[100,380,630].map(function(x,i){return '<g transform="translate('+x+',105) rotate('+([-1,3,-2][i])+')"><path d="M -'+(50-i*4)+' 10 Q 0 16 '+(50-i*4)+' 10 L '+(40-i*3)+' 0 Q 0 4 -'+(40-i*3)+' 0 Z" fill="var(--ink)" opacity="0.85"/><line x1="-4" y1="0" x2="-4" y2="-42" stroke="var(--ink)" stroke-width="2"/></g>';}).join('')}
+    <!-- Banner -->
+    <g transform="translate(380,42)">
+      <rect x="-200" y="-22" width="400" height="44" rx="2" fill="var(--paper2)" stroke="var(--ink)" stroke-width="1.5" style="filter:drop-shadow(3px 3px 0 rgba(0,0,0,0.12))"/>
+      <rect x="-194" y="-16" width="388" height="32" rx="1" fill="none" stroke="var(--ink)" stroke-width="0.5" opacity="0.5"/>
+      <text x="0" y="-2" text-anchor="middle" font-family="Cinzel,serif" font-size="13" font-weight="600" fill="var(--ink)">After Portland, February 1653</text>
+      <text x="0" y="14" text-anchor="middle" font-family="IM Fell English,serif" font-size="11" fill="var(--ink2)" font-style="italic">Blake's fleet holds the Narrow Seas. The war is won.</text>
+    </g>
+  </svg>`;
+}
+
+function drawIntroScene1() {
+  const ink = "var(--ink)";
+  const paper = "var(--paper)";
+  const paper2 = "var(--paper2)";
+  const red = "#c03030"; 
+  const dutchOrange = "#e07020";
+  const dutchBlue = "#2040a0";
+
+  return `<svg class="scene-svg" viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="darkWaveHatch" width="12" height="8" patternUnits="userSpaceOnUse">
+        <path d="M0 4 Q 3 1 6 4 T 12 4" fill="none" stroke="${ink}" stroke-width="0.8" opacity="0.4"/>
+      </pattern>
+      <pattern id="dutchSailHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="#d2b48c" />
+        <line x1="0" y1="0" x2="4" y2="4" stroke="${ink}" stroke-width="0.4" opacity="0.1"/>
+      </pattern>
+    </defs>
+
+    <rect x="100" y="135" width="180" height="25" fill="url(#darkWaveHatch)" />
+    <rect x="480" y="135" width="180" height="25" fill="url(#darkWaveHatch)" />
+
+    <g stroke="${ink}" stroke-width="1.5" fill="${paper}">
+      <rect x="0" y="135" width="100" height="25" />
+      <rect x="280" y="135" width="200" height="25" />
+      <rect x="660" y="135" width="100" height="25" />
+    </g>
+
+    <g fill="none" stroke="${ink}" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.25">
+       <path d="M80,100 Q180,65 300,90" />
+       <path d="M460,90 Q570,75 680,100" />
+    </g>
+
+    <g transform="translate(30, 135)" fill="${ink}">
+      <path d="M-10,0 V-12 L0,-18 L10,-12 V0 Z" />
+      <path d="M25,0 V-10 L32,-15 L39,-10 V0 Z" opacity="0.8"/>
+      <text x="15" y="18" text-anchor="middle" font-family="Cinzel" font-size="8" fill="${ink}">VIRGINIA</text>
+    </g>
+
+    <g transform="translate(380, 135)">
+       <path d="M-90,0 V-25 H-70 V-40 L-65,-45 L-60,-40 V-25 H-45 V-35 H-35 V-25 H35 V-35 H45 V-25 H60 V-45 L65,-50 L70,-45 V-25 H90 V0 Z" fill="${ink}" />
+       <path d="M-22,-25 H22 V-32 H-22 Z" fill="${ink}" />
+       <path d="M-18,-32 Q-18,-55 0,-58 Q18,-55 18,-32" fill="${ink}" />
+       <rect x="-2" y="-68" width="4" height="10" fill="${ink}" />
+       <text x="0" y="18" text-anchor="middle" font-family="Cinzel" font-size="9" fill="${ink}" font-weight="bold">LONDON</text>
+    </g>
+
+    <g transform="translate(710, 135)" fill="${ink}">
+      <path d="M-25,0 V-25 L-18,-32 L-11,-25 V0 Z" />
+      <path d="M-5,0 V-40 L5,-50 L15,-40 V0 Z" />
+      <text x="0" y="18" text-anchor="middle" font-family="Cinzel" font-size="8" fill="${ink}">AMSTERDAM</text>
+    </g>
+
+    <g transform="translate(190, 144) scale(0.55)">
+      <path d="M -45 0 L -55 -22 L 45 -22 L 35 0 Z" fill="${ink}"/>
+      <line x1="0" y1="-22" x2="0" y2="-80" stroke="${ink}" stroke-width="3"/>
+      <path d="M 0 -75 Q 35 -50 0 -15 Q 15 -50 0 -75 Z" fill="${paper2}" stroke="${ink}" stroke-width="1"/>
+      <g transform="translate(0, -84)">
+        <rect width="16" height="10" fill="white" stroke="${ink}" stroke-width="0.5"/>
+        <line x1="8" y1="0" x2="8" y2="10" stroke="${red}" stroke-width="2.2"/>
+        <line x1="0" y1="5" x2="16" y2="5" stroke="${red}" stroke-width="2.2"/>
+      </g>
+    </g>
+
+    <g transform="translate(570, 144) scale(0.55)">
+      <path d="M -45 0 L -55 -22 L 45 -22 L 35 0 Z" fill="${ink}"/>
+      <line x1="0" y1="-22" x2="0" y2="-80" stroke="${ink}" stroke-width="3"/>
+      <path d="M 0 -75 Q -35 -50 0 -15 Q -15 -50 0 -75 Z" fill="url(#dutchSailHatch)" stroke="${ink}" stroke-width="1"/>
+      <g transform="translate(0, -84)">
+          <rect width="16" height="3.3" fill="${dutchOrange}" />
+          <rect y="3.3" width="16" height="3.3" fill="white" />
+          <rect y="6.6" width="16" height="3.3" fill="${dutchBlue}" />
+          <rect width="16" height="10" fill="none" stroke="${ink}" stroke-width="0.5" />
+      </g>
+    </g>
+
+    <g transform="translate(380, 25)">
+      <path d="M-225,-18 L225,-18 L230,0 L225,18 L-225,18 L-230,0 Z" fill="${paper2}" stroke="${ink}" stroke-width="1.5" style="filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.12));"/>
+      <text x="0" y="6" text-anchor="middle" font-family="IM Fell English,serif" font-size="12" fill="${ink}">
+        England's trade, 1700: <tspan font-weight="bold">five times</tspan> the value of 1600
+      </text>
+    </g>
+  </svg>`;
+}
+
+
+// ============================================================
+// MAP PROJECTION
+// ============================================================
+var _projection = null;
+var _path = null;
+var _worldData = null;
+
+function getProjection(){
+  if(_projection) return _projection;
+  _projection = d3.geoMercator()
+    .center([-30, 38])
+    .scale(340)
+    .translate([400, 230]);
+  _path = d3.geoPath().projection(_projection);
+  return _projection;
+}
+
+function nodeXY(node){
+  var proj = getProjection();
+  var pt = proj([node.lon, node.lat]);
+  return {x: pt[0], y: pt[1]};
+}
+
+function loadWorldData(callback) {
+  if (_worldData) { callback(_worldData); return; }
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+    .then(function(r){ return r.json(); })
+    .then(function(world){ _worldData = world; callback(world); })
+    .catch(function(){
+      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+        .then(function(r){ return r.json(); })
+        .then(function(world){ _worldData = world; callback(world); })
+        .catch(function(){ callback(null); });
+    });
+}
+
+// ============================================================
+// MAP RENDERING
+// ============================================================
+function getCurrentActiveNode() {
+  if (currentActiveIdx >= NODE_ORDER.length) return null;
+  return NODES.find(function(n){ return n.id === NODE_ORDER[currentActiveIdx]; });
+}
+
+function renderMap() {
+  var svgEl = document.getElementById('atl-atlantic-map');
+  svgEl.innerHTML = '';
+
+  var proj = getProjection();
+  var svg = d3.select(svgEl);
+
+  // Parchment/beige sea background
+  svg.append('rect').attr('width',760).attr('height',440).attr('fill','#ddd0b0');
+
+  loadWorldData(function(world) {
+    if (world && typeof topojson !== 'undefined') {
+      var landFeature = null;
+      try { landFeature = topojson.feature(world, world.objects.land); } catch(e) {}
+      if (!landFeature) {
+        try { landFeature = topojson.feature(world, world.objects.countries); } catch(e2) {}
+      }
+      if (landFeature) {
+        var features = landFeature.type === 'FeatureCollection' ? landFeature.features : [landFeature];
+        svg.selectAll('.land').data(features).enter().append('path')
+          .attr('class','land').attr('d', _path)
+          .attr('fill','#e8dcc4').attr('stroke','#1a0f05').attr('stroke-width','0.85').attr('stroke-linejoin','round');
+      }
+    }
+    drawNodesLayer(svg, proj);
+  });
+}
+
+function drawNodesLayer(svg, proj) {
+  // Graticule
+  var graticule = d3.geoGraticule().step([10,10]);
+  svg.append('path').datum(graticule()).attr('d',_path)
+    .attr('fill','none').attr('stroke','rgba(26,15,5,0.06)').attr('stroke-width','0.5');
+
+  // Ocean labels removed
+
+  var activeNode = getCurrentActiveNode();
+
+  // DRAW COMPLETED CONNECTION LINES
+  drawnLines.forEach(function(pair){
+    var fromNode = NODES.find(function(n){return n.id===pair.from;});
+    var toNode = NODES.find(function(n){return n.id===pair.to;});
+    if (!fromNode || !toNode) return;
+    var fxy = nodeXY(fromNode);
+    var txy = nodeXY(toNode);
+    // Shadow
+    svg.append('line')
+      .attr('x1',fxy.x).attr('y1',fxy.y).attr('x2',txy.x).attr('y2',txy.y)
+      .attr('stroke','rgba(26,15,5,0.12)').attr('stroke-width','4').attr('stroke-linecap','round');
+    // Main ink route line
+    svg.append('line')
+      .attr('x1',fxy.x).attr('y1',fxy.y).attr('x2',txy.x).attr('y2',txy.y)
+      .attr('stroke','#6b4020').attr('stroke-width','2').attr('opacity','0.85')
+      .attr('stroke-dasharray','6,3').attr('stroke-linecap','round');
+  });
+
+  // DRAW NODES (background elements first)
+  NODES.forEach(function(node){
+    var xy = nodeXY(node);
+    var isCompleted = nodesCompleted[node.id];
+    var isActive = activeNode && activeNode.id === node.id;
+    var isLocked = !isCompleted && !isActive;
+
+    // Outer pulse ring, active node only
+    if (isActive) {
+      svg.append('circle')
+        .attr('cx',xy.x).attr('cy',xy.y).attr('r',22)
+        .attr('fill','rgba(107,64,32,0.08)')
+        .attr('stroke','rgba(107,64,32,0.4)').attr('stroke-width','1.5')
+        .attr('style','animation:pulse 2s ease-in-out infinite');
+      svg.append('circle')
+        .attr('cx',xy.x).attr('cy',xy.y).attr('r',16)
+        .attr('fill','none')
+        .attr('stroke','rgba(107,64,32,0.22)').attr('stroke-width','1');
+    }
+
+    var nodeR = (isLocked) ? 7 : 10;
+    var circ = svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',nodeR);
+
+    if (isCompleted) {
+      circ.attr('fill','#2d1a08').attr('stroke','#c8a96e').attr('stroke-width','2.5');
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',3.5).attr('fill','#c8a96e');
+    } else if (isActive) {
+      circ.attr('fill','#f5e9d0').attr('stroke','#6b4020').attr('stroke-width','2.5');
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',3).attr('fill','#a07840');
+    } else {
+      circ.attr('fill','rgba(200,169,110,0.07)').attr('stroke','rgba(139,96,53,0.18)').attr('stroke-width','1')
+        .attr('stroke-dasharray','3,2');
+    }
+
+    // Label, BLACK for all active/completed, faint for locked
+    var labelOffsets = {
+      amsterdam:[18, -4], london:[0,20],
+      edinburgh:[0,-17], bristol:[-22,-15], barbados:[0,-17], virginia:[-22,-15]
+    };
+    var off = labelOffsets[node.id] || [0,-16];
+    var labelColor = isLocked ? 'rgba(26,15,5,0.3)' : '#1a0f05';
+    var labelW = (isCompleted || isActive) ? '700' : '400';
+
+    if (node.id === 'amsterdam') {
+      // Single-line label: "Rotterdam"
+      svg.append('text')
+        .attr('x', xy.x + 18).attr('y', xy.y)
+        .attr('text-anchor','start').attr('font-family','Cinzel,serif').attr('font-size','9')
+        .attr('fill', labelColor).attr('font-weight', labelW)
+        .text('Rotterdam');
+    } else {
+      svg.append('text')
+        .attr('x', xy.x + off[0]).attr('y', xy.y + off[1])
+        .attr('text-anchor','middle').attr('font-family','Cinzel,serif').attr('font-size','9')
+        .attr('fill', labelColor).attr('font-weight', labelW)
+        .text(node.label);
+    }
+  });
+
+  // CLICKABLE TARGETS (drawn last so they're on top)
+  NODES.forEach(function(node){
+    var xy = nodeXY(node);
+    var isCompleted = nodesCompleted[node.id];
+    var isActive = activeNode && activeNode.id === node.id;
+
+    if (isActive) {
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',22)
+        .attr('fill','transparent').attr('cursor','pointer')
+        .attr('data-nodeid',node.id)
+        .on('click', function(){ nodeClicked(d3.select(this).attr('data-nodeid')); });
+    } else if (isCompleted) {
+      svg.append('circle').attr('cx',xy.x).attr('cy',xy.y).attr('r',12)
+        .attr('fill','transparent').attr('cursor','default')
+        .attr('data-nodeid',node.id)
+        .on('click', function(){
+          var nid = d3.select(this).attr('data-nodeid');
+          showNodeInfo(NODES.find(function(n){return n.id===nid;}));
+        });
+    }
+    // Locked nodes: no handler, not clickable
+  });
+
+  // Map hint
+  if (activeNode) {
+    document.getElementById('atl-map-hint').textContent = 'Click ' + activeNode.name + ' to continue the web';
+  } else {
+    document.getElementById('atl-map-hint').textContent = 'The web is complete';
+  }
+
+  // bottom label removed
+}
+
+function showNodeInfo(node) {
+  if (!node) return;
+  var panel = document.getElementById('atl-node-info-panel');
+  panel.style.display = 'block';
+  panel.innerHTML = '<div class="node-panel"><div class="node-panel-title">'+node.name+'</div><div class="node-panel-sub">'+node.era+' ✦ Connected</div></div>';
+}
+
+// ============================================================
+// NODE EVENT
+// ============================================================
+function nodeClicked(nodeId) {
+  var activeNode = getCurrentActiveNode();
+  if (!activeNode || activeNode.id !== nodeId) {
+    return;
+  }
+  currentNodeId = nodeId;
+  // Virginia gets the crossing screen first
+  if (nodeId === 'virginia') {
+    showScreen('atl-s-virginia-crossing');
+    return;
+  }
+  startNodeEvent(nodeId);
+}
+
+function startNodeEvent(nodeId) {
+  var node = NODES.find(function(n){return n.id===nodeId;});
+  var ev = NODE_EVENTS[node.event];
+  if (!ev) return;
+  currentNodeId = nodeId;
+  renderStats('atl-ev-stats');
+
+  if (ev.contextText) {
+    document.getElementById('atl-ev-context-wrap').style.display = 'block';
+    document.getElementById('atl-ev-context-yr').textContent = ev.year;
+    document.getElementById('atl-ev-context-title').textContent = ev.contextTitle || node.name;
+    document.getElementById('atl-ev-context-text').textContent = ev.contextText;
+    var hq = ev.histQuote || '';
+    var hqEl = document.getElementById('atl-ev-hist-quote');
+    var haEl = document.getElementById('atl-ev-hist-attr');
+    hqEl.textContent = hq;
+    hqEl.style.display = hq ? 'block' : 'none';
+    haEl.textContent = ev.histAttr || '';
+    haEl.style.display = ev.histAttr ? 'block' : 'none';
+  } else {
+    document.getElementById('atl-ev-context-wrap').style.display = 'none';
+  }
+
+  document.getElementById('atl-ev-title').textContent = ev.title;
+  document.getElementById('atl-ev-prompt').textContent = ev.promptFn(playerName);
+  var quoteEl = document.getElementById('atl-ev-quote');
+  var attrEl = document.getElementById('atl-ev-attr');
+  if (ev.quote) {
+    quoteEl.textContent = ev.quote;
+    quoteEl.style.display = 'block';
+    attrEl.textContent = ev.attr || '';
+    attrEl.style.display = ev.attr ? 'block' : 'none';
+  } else {
+    quoteEl.textContent = '';
+    quoteEl.style.display = 'none';
+    attrEl.textContent = '';
+    attrEl.style.display = 'none';
+  }
+
+  renderChoices(ev);
+  showScreen('atl-s-node-event');
+}
+
+function renderChoices(ev) {
+  var container = document.getElementById('atl-ev-choices');
+  container.innerHTML = '';
+  ev.choices.forEach(function(ch,i){
+    var btn = document.createElement('button');
+    btn.className = 'cbtn';
+    // Build effect pills
+    var pillsHtml = '';
+    if (ch.effects) {
+      var pillSpans = Object.keys(ch.effects).filter(function(k){return ch.effects[k]!==0;}).map(function(k){
+        var v = ch.effects[k];
+        var sign = v > 0 ? '+' : '';
+        return '<span class="eff-'+k+' '+(v>0?'eff-pos':'eff-neg')+'">'+sign+v+' '+STAT_LABELS[k]+'</span>';
+      });
+      if (pillSpans.length) pillsHtml = '<div class="eff">'+pillSpans.join('')+'</div>';
+    }
+    btn.innerHTML = '<span class="cl">'+ch.label+'</span><span class="cd">'+ch.desc+'</span>'+pillsHtml;
+    btn.addEventListener('click',function(){choiceMade(i,ev);});
+    container.appendChild(btn);
+  });
+}
+
+function choiceMade(idx, ev) {
+  var btns = document.querySelectorAll('#atl-ev-choices .cbtn');
+  // Disable all buttons, no green flash
+  btns.forEach(function(b){ b.style.pointerEvents='none'; b.style.opacity='0.7'; });
+  btns[idx].style.opacity='1';
+  btns[idx].style.borderLeftColor='var(--border2)';
+  applyEffects(ev.choices[idx].effects);
+  totalConnections++;
+  nodesCompleted[currentNodeId] = true;
+  addCompletionLine(currentNodeId);
+  currentActiveIdx++;
+  setTimeout(function(){ showConsequence(ev, idx); }, 300);
+  renderStats('atl-ev-stats');
+}
+
+function addCompletionLine(nodeId) {
+  // Draw line from the PREVIOUS node in NODE_ORDER sequence to this one
+  var idx = NODE_ORDER.indexOf(nodeId);
+  var fromId = null;
+  if (idx > 0) {
+    fromId = NODE_ORDER[idx - 1];
+  }
+  if (fromId) {
+    // Prevent duplicate lines
+    var already = drawnLines.some(function(l){ return l.from===fromId && l.to===nodeId; });
+    if (!already) drawnLines.push({from: fromId, to: nodeId});
+  }
+}
+
+function applyEffects(effects) {
+  if (!effects) return;
+  Object.keys(effects).forEach(function(k){
+    stats[k] = Math.max(0, Math.min(20, stats[k]+(effects[k]||0)));
+  });
+}
+
+function showConsequence(ev, idx) {
+  renderStats('atl-cons-stats');
+  var ch = ev.choices[idx];
+  document.getElementById('atl-cons-text').textContent = ch.consequenceFn(playerName);
+
+  var deltaRow = document.getElementById('atl-cons-deltas');
+  deltaRow.innerHTML = '';
+  Object.keys(ch.effects||{}).forEach(function(k){
+    var v = ch.effects[k];
+    if (v !== 0) {
+      var pill = document.createElement('span');
+      pill.className = 'delta-pill eff-'+k;
+      pill.textContent = (v>0?'+':'')+v+' '+STAT_LABELS[k];
+      deltaRow.appendChild(pill);
+    }
+  });
+
+  document.getElementById('atl-connections-count').textContent = 'Connections: '+totalConnections;
+  showScreen('atl-s-consequence');
+}
+
+// ============================================================
+// STATS RENDERING
+// ============================================================
+function renderStats(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  Object.keys(stats).forEach(function(k){
+    var div = document.createElement('div');
+    div.className = 'sc';
+    var pct = Math.round(stats[k]/20*100);
+    div.innerHTML = '<div class="sn">'+STAT_LABELS[k]+'</div><div class="sv">'+stats[k]+'</div><div class="strack"><div class="sfill" style="background:'+STAT_COLORS[k]+';width:'+pct+'%"></div></div>';
+    container.appendChild(div);
+  });
+}
+
+// ============================================================
+// SCREEN MANAGEMENT
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ============================================================
+// COMPLETION CHECK
+// ============================================================
+function checkCompletion() {
+  if (nodesCompleted['virginia']) { showFinal(); }
+}
+
+function showFinal() {
+  renderStats('atl-final-stats');
+  var score = totalConnections;
+  renderFinalMap();
+
+  // Node summary
+  var nodeCountEl = document.getElementById('final-node-count');
+  if (nodeCountEl) nodeCountEl.textContent = score + ' / 6';
+  var nodeLabels = {amsterdam:'Rotterdam',london:'London',edinburgh:'Edinburgh',bristol:'Bristol',barbados:'Barbados',virginia:'Virginia'};
+  var nodeEras = {amsterdam:'Origin, 1649–1689',london:'1694, The Bank',edinburgh:'1707, The Union',bristol:'1750, The Triangle',barbados:'1733, Navigation System',virginia:'1765, The Resolves'};
+  var summaryEl = document.getElementById('atl-final-node-summary');
+  summaryEl.innerHTML = '';
+  var allSummaryNodes = NODE_ORDER;
+  allSummaryNodes.forEach(function(nid){
+    var done = !!nodesCompleted[nid];
+    var el = document.createElement('div');
+    el.style.cssText = 'background:var(--paper3);border:1px solid '+(done?'var(--border2)':'rgba(139,96,53,0.3)')+';border-radius:2px;padding:0.5rem 0.75rem;opacity:'+(done?'1':'0.5');
+    el.innerHTML = '<div style="font-family:\'Cinzel\',serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:'+(done?'var(--aged2)':'rgba(160,120,64,0.5)')+';margin-bottom:2px">'+nodeEras[nid]+'</div>'
+      +'<div style="font-family:\'Cinzel\',serif;font-size:13px;font-weight:600;color:'+(done?'var(--ink)':'rgba(26,15,5,0.4)')+'">'+nodeLabels[nid]+'</div>'
+      +'<div style="font-size:11px;color:'+(done?'#1a4a1a':'rgba(160,120,64,0.5)')+';font-family:\'Cinzel\',serif;margin-top:2px">'+(done?'✓ Connected':'○ Not reached')+'</div>';
+    summaryEl.appendChild(el);
+  });
+
+  showScreen('atl-s-final');
+}
+
+// ============================================================
+// HANDOFF FROM PART 1
+// ============================================================
+function checkHandoff() {
+  try {
+    var raw = localStorage.getItem('commonwealth_handoff');
+    if (raw) {
+      var data = JSON.parse(raw);
+      playerName = data.playerName || 'Analyst';
+      var s = data.stats || {};
+      stats.fiscal   = Math.max(4, Math.min(20, (s.support||10) + (s.stability||10) - 10));
+      stats.commerce  = Math.max(4, Math.min(20, (s.wealth||10)));
+      stats.republic  = Math.max(4, Math.min(20, (s.stability||10)));
+      stats.consent   = 10;
+      localStorage.removeItem('commonwealth_handoff');
+      showScreen('atl-s-transition');
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+
+function initMap() {
+  // All nodes start unlocked sequentially from amsterdam
+  nodesCompleted = {};
+  currentActiveIdx = 0;
+  drawnLines = [];
+  renderStats('atl-map-stats');
+  renderMap();
+  showScreen('atl-s-map');
+}
+
+// ============================================================
+// INTRO NAVIGATION
+// ============================================================
+function goAtlasIntro(n) {
+  var ids = ['atl-s-intro1','atl-s-intro2'];
+  showScreen(ids[n-1]);
+}
+
+
+
+  window.goAtlasIntro = goAtlasIntro;
+  window.startAtlanticWeb = function(commonwealthName, commonwealthStats){
+    playerName = commonwealthName || playerName || 'Analyst';
+    var s = commonwealthStats || {};
+    stats.fiscal   = Math.max(4, Math.min(20, (s.support||10) + (s.stability||10) - 10));
+    stats.commerce  = Math.max(4, Math.min(20, (s.wealth||10)));
+    stats.republic  = Math.max(4, Math.min(20, (s.stability||10)));
+    stats.consent   = 10;
+    showScreen('atl-s-transition');
+  };
+
+// ============================================================
+// WIRING
+// ============================================================
+window.addEventListener('DOMContentLoaded', function(){
+  // Render intro scenes (ink style)
+  var si1 = document.getElementById('atl-scene-intro1');
+  if (si1) si1.innerHTML = drawIntroScene1();
+  var ts = document.getElementById('atl-transition-scene');
+  if (ts) ts.innerHTML = drawSceneTransition();
+
+  // In the merged file, Part II starts only when Part I calls window.startAtlanticWeb.
+  // Pre-warm map data and projection in background
+  getProjection();
+  loadWorldData(function(){});
+
+  document.getElementById('atl-btn-cross-yes').addEventListener('click', function(){
+    // Mark virginia complete and go straight to final screen
+    nodesCompleted['virginia'] = true;
+    totalConnections++;
+    addCompletionLine('virginia');
+    var alreadyVL = drawnLines.some(function(l){return l.from==='virginia' && l.to==='london';});
+    if (!alreadyVL) drawnLines.push({from:'virginia', to:'london'});
+    currentActiveIdx++;
+    showFinal();
+  });
+
+  document.getElementById('atl-btn-transition-next').addEventListener('click', function(){ showScreen('atl-s-intro1'); });
+
+  document.getElementById('atl-btn-intro2').addEventListener('click', function(){ initMap(); });
+
+  document.getElementById('atl-btn-cons-continue').addEventListener('click', function(){
+    renderStats('atl-map-stats');
+    renderMap();
+    showScreen('atl-s-map');
+    if (nodesCompleted['virginia']) { setTimeout(checkCompletion, 200); }
+  });
+
+  document.getElementById('atl-btn-play-again').addEventListener('click', function(){
+    stats = {fiscal:10,commerce:10,republic:10,consent:10};
+    nodesCompleted = {}; drawnLines = []; totalConnections = 0;
+    currentActiveIdx = 0; currentNodeId = null; playerName = 'Analyst';
+    showScreen('atl-s-intro1');
+  });
+});
+
+})();
+</script>
+</body>
+</html>
